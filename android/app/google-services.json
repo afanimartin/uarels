@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "93882328030",
+    "project_id": "uarels",
+    "storage_bucket": "uarels.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:93882328030:android:270a3097842d669f08734f",
+        "android_client_info": {
+          "package_name": "com.example.uarels"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "93882328030-dru7hvrsog7guienpdbg6vvvh5kqbhta.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.uarels",
+            "certificate_hash": "b240267291a83d6bdbc3c42db03ff1ec334ad828"
+          }
+        },
+        {
+          "client_id": "93882328030-nu83c7ssc0t2mlvkqb8dcsrts80vr373.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbAqNiONxhHLfKT-VDFcGenC4LmGNUAm8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "93882328030-nu83c7ssc0t2mlvkqb8dcsrts80vr373.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
