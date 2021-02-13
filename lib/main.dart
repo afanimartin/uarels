@@ -1,6 +1,12 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:uarels/screens/screens.dart';
+import 'screens/screens.dart';
 
-void main() {
-  runApp(App());
+// ignore: avoid_void_async
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp();
+
+  runApp(const App());
 }

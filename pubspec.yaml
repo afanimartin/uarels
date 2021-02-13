@@ -36,10 +36,13 @@ dependencies:
   google_sign_in: ^4.5.4
   equatable: ^1.2.5
   url_launcher: ^5.7.10
+  metadata_fetch: ^0.3.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  pedantic: ^1.9.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
