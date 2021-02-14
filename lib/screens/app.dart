@@ -4,5 +4,12 @@ class App extends StatelessWidget {
   const App({Key key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => Container();
+  Widget build(BuildContext context) => MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(
+          appBar: AppBar(
+            title: const Text('App Page'),
+          ),
+        ),
+      );
 }

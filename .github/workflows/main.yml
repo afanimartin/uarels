@@ -5,7 +5,10 @@ jobs:
     name: Build APK
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
+      run: |
+        echo "${{ secrets.JKS_RELEASE }}" > uarels.jks.asc
+        gpg -d --passphrase "{{ secrets.JKS_RELEASE_PASSPHRASE }}" --batch uarels.jks.asc > app/uarels.jks
       with:
         fetch-depth: 0
     - uses: actions/setup-java@v1
