@@ -27,10 +27,10 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 def keystoreProperties = {
-    'keyAlias': 'key',
-    'keyPassword': 'uarels',
-    'storePassword': 'uarels',
-    'storeFile':'android/app/uarels.jks'
+    'keyAlias': key,
+    'keyPassword': uarels,
+    'storePassword': uarels,
+    'storeFile':android/app/uarels.jks
 }
 // def keystorePropertiesFile = rootProject.file('key.properties')
 // if (keystorePropertiesFile.exists()) {
