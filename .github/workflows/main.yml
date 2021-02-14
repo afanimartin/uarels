@@ -16,7 +16,7 @@ jobs:
         flutter-version: '1.7.8+hotfix.4'
     - run: flutter upgrade 
     - run: flutter pub get
-    - run: apt upgrade gpg
+    - run: sudo apt upgrade gpg
     - run: gpg --version
     - run: |
         echo "${{ secrets.JKS_RELEASE }}" > uarels.jks.asc
