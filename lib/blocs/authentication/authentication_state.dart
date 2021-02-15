@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:uarels/models/user/user.dart';
+import '../../models/user/user.dart';
 
 enum AuthenticationStatus { unknown, authenticated, unauthenticated }
 
@@ -11,10 +11,15 @@ class AuthenticationState extends Equatable {
       {this.status = AuthenticationStatus.unknown,
       this.user = UserModel.empty});
 
-  static AuthenticationState authenticated(UserModel user) =>
+  factory AuthenticationState.unknown() => const AuthenticationState();
+
+  factory AuthenticationState.authenticated(UserModel user) =>
       AuthenticationState(
           status: AuthenticationStatus.authenticated, user: user);
 
+  factory AuthenticationState.unauthenticated() =>
+      const AuthenticationState(status: AuthenticationStatus.unauthenticated);
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [status, user];
 }

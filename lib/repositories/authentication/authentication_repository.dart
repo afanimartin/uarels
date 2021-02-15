@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import '../../exceptions/authentication/authentication_exceptions.dart';
 import '../../models/user/user.dart';
 
 import 'i_authentication_repository.dart';
@@ -20,13 +21,17 @@ class AuthenticationRepository extends IAuthenticationRepository {
 
   @override
   Future<void> logInWithGoogleAccount() async {
-    final googleUser = await _googleSignIn.signIn();
-    final googleAuthentication = await googleUser.authentication;
-    final googleAuthCredential = GoogleAuthProvider.credential(
-        accessToken: googleAuthentication.accessToken,
-        idToken: googleAuthentication.idToken);
+    try {
+      final googleUser = await _googleSignIn.signIn();
+      final googleAuthentication = await googleUser.authentication;
+      final googleAuthCredential = GoogleAuthProvider.credential(
+          accessToken: googleAuthentication.accessToken,
+          idToken: googleAuthentication.idToken);
 
-    await _firebaseAuth.signInWithCredential(googleAuthCredential);
+      await _firebaseAuth.signInWithCredential(googleAuthCredential);
+    } on Exception {
+      throw LogInWithGoogleFailure;
+    }
   }
 
   @override
