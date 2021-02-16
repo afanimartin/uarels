@@ -17,6 +17,8 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        elevation: 4,
+        backgroundColor: Colors.white,
         toolbarHeight: 60,
         leading: Padding(
           padding: const EdgeInsets.only(left: 10),
@@ -27,12 +29,14 @@ class HomeScreen extends StatelessWidget {
         centerTitle: true,
         title: const Text(
           'Uarels',
-          style: TextStyle(fontSize: 24, letterSpacing: 1.2),
+          style:
+              TextStyle(fontSize: 24, letterSpacing: 1.2, color: Colors.black),
         ),
         actions: [
           IconButton(
               icon: const Icon(
                 Icons.exit_to_app,
+                color: Colors.black,
                 size: 30,
               ),
               onPressed: () => context

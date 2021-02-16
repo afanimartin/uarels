@@ -1,6 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-const _avatarSize = 45.0;
+const _avatarSize = 40.0;
 
 class Avatar extends StatelessWidget {
   final String photoUrl;
@@ -8,14 +9,13 @@ class Avatar extends StatelessWidget {
   const Avatar({@required this.photoUrl, Key key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => CircleAvatar(
-        radius: _avatarSize,
-        backgroundImage: photoUrl != null ? NetworkImage(photoUrl) : null,
-        child: photoUrl == null
-            ? const Icon(
-                Icons.person_outline,
-                size: _avatarSize,
-              )
-            : null,
+  Widget build(BuildContext context) => Stack(
+        children: [
+          CircleAvatar(
+              radius: _avatarSize,
+              backgroundImage: CachedNetworkImageProvider(
+                photoUrl,
+              ))
+        ],
       );
 }

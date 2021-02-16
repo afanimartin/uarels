@@ -38,6 +38,7 @@ dependencies:
   url_launcher: ^5.7.10
   metadata_fetch: ^0.3.4
   formz: ^0.3.0
+  cached_network_image: ^2.5.0
 
 dev_dependencies:
   flutter_test:
