@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pedantic/pedantic.dart';
 import '../../models/models.dart';
@@ -12,7 +13,8 @@ class AuthenticationBloc
   final AuthenticationRepository _authenticationRepository;
   StreamSubscription _userStreamSubscription;
 
-  AuthenticationBloc({AuthenticationRepository authenticationRepository})
+  AuthenticationBloc(
+      {@required AuthenticationRepository authenticationRepository})
       : _authenticationRepository =
             authenticationRepository ?? AuthenticationRepository(),
         super(AuthenticationState.unknown()) {
