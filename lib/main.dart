@@ -6,7 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'blocs/blocs.dart';
 import 'blocs/simple_bloc_observer.dart';
+import 'blocs/url/url_bloc.dart';
 import 'repositories/repositories.dart';
+import 'repositories/url/url_repository.dart';
 import 'screens/screens.dart';
 
 void main() async {
@@ -18,11 +20,25 @@ void main() async {
 
   EquatableConfig.stringify = kDebugMode;
 
-  runApp(RepositoryProvider<AuthenticationRepository>(
-    create: (_) => AuthenticationRepository(),
-    child: BlocProvider<AuthenticationBloc>(
-      create: (context) => AuthenticationBloc(
-          authenticationRepository: AuthenticationRepository()),
+  runApp(MultiRepositoryProvider(
+    providers: [
+      RepositoryProvider<AuthenticationRepository>(
+        create: (_) => AuthenticationRepository(),
+      ),
+      RepositoryProvider<UrlRepository>(
+        create: (_) => UrlRepository(),
+      )
+    ],
+    child: MultiBlocProvider(
+      providers: [
+        BlocProvider<AuthenticationBloc>(
+          create: (context) => AuthenticationBloc(
+              authenticationRepository: AuthenticationRepository()),
+        ),
+        BlocProvider<UrlBloc>(
+          create: (_) => UrlBloc(urlRepository: UrlRepository()),
+        )
+      ],
       child: const App(),
     ),
   ));

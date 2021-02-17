@@ -9,13 +9,14 @@ class Avatar extends StatelessWidget {
   const Avatar({@required this.photoUrl, Key key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => Stack(
-        children: [
-          CircleAvatar(
-              radius: _avatarSize,
-              backgroundImage: CachedNetworkImageProvider(
-                photoUrl,
-              ))
-        ],
+  Widget build(BuildContext context) => GestureDetector(
+        onTap: () {},
+        child: CircleAvatar(
+            radius: _avatarSize,
+            backgroundImage: photoUrl != null
+                ? CachedNetworkImageProvider(
+                    photoUrl,
+                  )
+                : null),
       );
 }
