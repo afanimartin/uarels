@@ -1,25 +1,21 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
+
 import '../../models/user/user.dart';
 
-enum AuthenticationStatus { unknown, authenticated, unauthenticated }
-
-class AuthenticationState extends Equatable {
-  final AuthenticationStatus status;
-  final UserModel user;
-
-  const AuthenticationState(
-      {this.status = AuthenticationStatus.unknown,
-      this.user = UserModel.empty});
-
-  factory AuthenticationState.unknown() => const AuthenticationState();
-
-  factory AuthenticationState.authenticated(UserModel user) =>
-      AuthenticationState(
-          status: AuthenticationStatus.authenticated, user: user);
-
-  factory AuthenticationState.unauthenticated() =>
-      const AuthenticationState(status: AuthenticationStatus.unauthenticated);
+abstract class AuthenticationState extends Equatable {
+  const AuthenticationState();
 
   @override
-  List<Object> get props => [status, user];
+  List<Object> get props => [];
 }
+class Authenticated extends AuthenticationState {
+  final UserModel user;
+
+  const Authenticated({@required this.user});
+
+  @override
+  List<Object> get props => [user];
+}
+
+class UnAuthenticated extends AuthenticationState {}

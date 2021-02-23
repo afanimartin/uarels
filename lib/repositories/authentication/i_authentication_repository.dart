@@ -1,5 +1,7 @@
-abstract class IAuthenticationRepository {
-  Future<void> logInWithGoogleAccount();
+import '../../models/models.dart';
 
-  Future<void> logOut();
+abstract class IAuthenticationRepository {
+  Future<UserModel> getCurrentUser();
+
+  Future<UserModel> logInAnonymously();
 }

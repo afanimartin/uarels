@@ -2,32 +2,48 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/models.dart';
-import '../../models/user/user.dart';
 
-class UrlEvent extends Equatable {
-  final UserModel user;
-  final List<Url> urls;
-
-  const UrlEvent({@required this.user, @required this.urls});
+abstract class UrlEvent extends Equatable {
+  const UrlEvent();
 
   @override
-  List<Object> get props => [user, urls];
+  List<Object> get props => [];
 }
 
-// class FetchAllUrls extends UrlEvent {
-//   final UserModel user;
+class LoadUrls extends UrlEvent {}
 
-//   const FetchAllUrls({@required this.user});
+class AddUrl extends UrlEvent {
+  final String inputUrl;
 
-//   @override
-//   List<Object> get props => [user];
-// }
+  const AddUrl({@required this.inputUrl});
 
-// class UpdateUrls extends UrlEvent {
-//   final List<Url> urls;
+  @override
+  List<Object> get props => [inputUrl];
+}
 
-//   const UpdateUrls({@required this.urls});
+class UpdateUrl extends UrlEvent {
+  final Url url;
 
-//   @override
-//   List<Object> get props => [urls];
-// }
+  const UpdateUrl({@required this.url});
+
+  @override
+  List<Object> get props => [url];
+}
+
+class DeleteUrl extends UrlEvent {
+  final Url url;
+
+  const DeleteUrl({@required this.url});
+
+  @override
+  List<Object> get props => [url];
+}
+
+class UpdateUrls extends UrlEvent {
+  final List<Url> urls;
+
+  const UpdateUrls({@required this.urls});
+
+  @override
+  List<Object> get props => [urls];
+}

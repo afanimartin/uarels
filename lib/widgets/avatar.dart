@@ -12,6 +12,7 @@ class Avatar extends StatelessWidget {
   Widget build(BuildContext context) => GestureDetector(
         onTap: () {},
         child: CircleAvatar(
+            foregroundColor: Theme.of(context).accentColor,
             radius: _avatarSize,
             backgroundImage: photoUrl != null
                 ? CachedNetworkImageProvider(

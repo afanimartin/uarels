@@ -1,9 +1,6 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pedantic/pedantic.dart';
-import '../../models/models.dart';
+
 import '../../repositories/repositories.dart';
 import 'authentication_event.dart';
 import 'authentication_state.dart';
@@ -11,32 +8,29 @@ import 'authentication_state.dart';
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   final AuthenticationRepository _authenticationRepository;
-  StreamSubscription _userStreamSubscription;
 
   AuthenticationBloc(
       {@required AuthenticationRepository authenticationRepository})
-      : _authenticationRepository =
-            authenticationRepository ?? AuthenticationRepository(),
-        super(AuthenticationState.unknown()) {
-    _userStreamSubscription?.cancel();
-
-    _userStreamSubscription = _authenticationRepository.user
-        .listen((user) => add(AuthenticationUserChanged(user: user)));
-  }
+      : _authenticationRepository = authenticationRepository,
+        super(UnAuthenticated());
 
   @override
   Stream<AuthenticationState> mapEventToState(
       AuthenticationEvent event) async* {
-    if (event is AuthenticationUserChanged) {
-      yield _mapAuthenticationUserChangedToState(event);
-    } else if (event is AuthenticationLogOutRequested) {
-      unawaited(_authenticationRepository.logOut());
+    if (event is AppStarted) {
+      yield* _mapAppStartedToState();
     }
   }
 
-  AuthenticationState _mapAuthenticationUserChangedToState(
-          AuthenticationUserChanged event) =>
-      event.user == UserModel.empty
-          ? AuthenticationState.unauthenticated()
-          : AuthenticationState.authenticated(event.user);
+  Stream<AuthenticationState> _mapAppStartedToState() async* {
+    try {
+      var currentUser = await _authenticationRepository.getCurrentUser();
+
+      currentUser ??= await _authenticationRepository.logInAnonymously();
+
+      yield Authenticated(user: currentUser);
+    } on Exception catch (_) {
+      yield UnAuthenticated();
+    }
+  }
 }

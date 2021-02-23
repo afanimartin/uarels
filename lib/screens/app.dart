@@ -22,21 +22,18 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) => MaterialApp(
         debugShowCheckedModeBanner: false,
         navigatorKey: _navigatorKey,
+        theme: ThemeData(accentColor: Colors.cyan[700]),
         builder: (context, child) =>
             BlocListener<AuthenticationBloc, AuthenticationState>(
           listener: (context, state) {
-            switch (state.status) {
-              case AuthenticationStatus.authenticated:
-                _navigatorState.pushAndRemoveUntil<void>(
-                    HomeScreen.route(), (route) => false);
-                break;
-              case AuthenticationStatus.unauthenticated:
-                _navigatorState.pushAndRemoveUntil<void>(
-                    LogInScreen.route(), (route) => false);
-                break;
+            if (state is Authenticated) {
+              _navigatorState.pushAndRemoveUntil<void>(
+                  HomeScreen.route(), (route) => false);
+            }
 
-              default:
-                break;
+            if (state is UnAuthenticated) {
+              _navigatorState.pushAndRemoveUntil<void>(
+                  LogInScreen.route(), (route) => false);
             }
           },
           child: child,
