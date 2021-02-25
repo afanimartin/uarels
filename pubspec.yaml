@@ -36,6 +36,7 @@ dependencies:
   google_sign_in: ^4.5.4
   equatable: ^1.2.5
   url_launcher: ^5.7.10
+  webview_flutter: ^1.0.7
   metadata_fetch: ^0.3.4
   formz: ^0.3.0
   cached_network_image: ^2.5.0

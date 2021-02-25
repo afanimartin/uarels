@@ -1,24 +1,36 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../models/models.dart';
-import '../../utils/paths.dart';
 import 'i_authentication_repository.dart';
 
 class AuthenticationRepository implements IAuthenticationRepository {
   final FirebaseAuth _firebaseAuth;
-  final FirebaseFirestore _firebaseFirestore;
+  final GoogleSignIn _googleSignIn;
 
   AuthenticationRepository(
-      {FirebaseAuth firebaseAuth, FirebaseFirestore firebaseFirestore})
+      {FirebaseAuth firebaseAuth, GoogleSignIn googleSignIn})
       : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
-        _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
+        _googleSignIn = googleSignIn ??
+            GoogleSignIn
+                .standard(); // You will see errors without: GoogleSignIn.standard()
+
+  Stream<UserModel> get user =>
+      _firebaseAuth.authStateChanges().map((firebaseUser) =>
+          firebaseUser == null ? UserModel.empty : toUser(firebaseUser));
 
   @override
-  Future<UserModel> logInAnonymously() async {
-    final authResult = await _firebaseAuth.signInAnonymously();
+  Future<UserModel> logInWithGoogleAccount() async {
+    final googleUser = await _googleSignIn.signIn();
+    final googleAuthentication = await googleUser.authentication;
 
-    return toUser(authResult.user);
+    final googleCredential = GoogleAuthProvider.credential(
+        accessToken: googleAuthentication.accessToken,
+        idToken: googleAuthentication.idToken);
+
+    final user = await _firebaseAuth.signInWithCredential(googleCredential);
+
+    return toUser(user.user);
   }
 
   @override
@@ -29,21 +41,18 @@ class AuthenticationRepository implements IAuthenticationRepository {
       return null;
     }
 
-    return toUser(currentUser);
+    final user = toUser(currentUser);
+    return user;
   }
 
-  Future<UserModel> toUser(User firebaseUser) async {
-    final userDoc = await _firebaseFirestore
-        .collection(Paths.users)
-        .doc(firebaseUser.uid)
-        .get();
-
-    if (userDoc.exists) {
-      final user = UserModel.fromSnapshot(userDoc);
-
-      return user;
-    }
-
-    return UserModel.empty;
+  @override
+  Future<void> logOut() async {
+    await _googleSignIn.signOut();
   }
+
+  UserModel toUser(User firebaseUser) => UserModel(
+      userId: firebaseUser.uid,
+      email: firebaseUser.email,
+      username: firebaseUser.displayName,
+      photo: firebaseUser.photoURL);
 }

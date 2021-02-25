@@ -58,3 +58,14 @@ class UrlUpdating extends UrlState {}
 class UrlUpdated extends UrlState {}
 
 class UrlUpdatingFailed extends UrlState {}
+
+class LaunchingUrl extends UrlState {}
+
+class UrlLaunched extends UrlState {
+  final String url;
+
+  const UrlLaunched({@required this.url});
+
+  @override
+  List<Object> get props => [url];
+}

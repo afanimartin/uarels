@@ -44,7 +44,7 @@ class UrlBloc extends Bloc<UrlEvent, UrlState> {
 
     String currentUserId;
 
-    if (authState is Authenticated) {
+    if (authState is AuthenticationState) {
       currentUserId = authState.user.userId;
     }
     return currentUserId;
@@ -117,4 +117,6 @@ class UrlBloc extends Bloc<UrlEvent, UrlState> {
 
     return super.close();
   }
+
+  Future<void> launchUrl(String url) async {}
 }

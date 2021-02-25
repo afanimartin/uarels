@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/log_in_form.dart';
+
 class LogInScreen extends StatelessWidget {
   const LogInScreen({Key key}) : super(key: key);
 
@@ -9,7 +11,7 @@ class LogInScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: const Text('You are not authenticated!'),
+          title: const LogInForm(),
         ),
       );
 }

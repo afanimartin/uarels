@@ -47,3 +47,12 @@ class UpdateUrls extends UrlEvent {
   @override
   List<Object> get props => [urls];
 }
+
+class LaunchUrl extends UrlEvent {
+  final String url;
+
+  const LaunchUrl({@required this.url});
+
+  @override
+  List<Object> get props => [url];
+}
