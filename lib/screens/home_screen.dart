@@ -6,9 +6,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 import '../blocs/authentication/authentication_event.dart';
+import '../blocs/authentication/authentication_state.dart';
 import '../blocs/blocs.dart';
+import '../blocs/tab/tab_bloc.dart';
+import '../blocs/tab/tab_event.dart';
 import '../blocs/url/url_event.dart';
 import '../blocs/url/url_state.dart';
+import '../models/models.dart';
 import '../widgets/widgets.dart';
 import 'article_details.dart';
 
@@ -26,8 +30,19 @@ class _HomeScreenState extends State<HomeScreen> {
   final _urlTextEditingController = TextEditingController();
 
   @override
-  Widget build(BuildContext context) => Scaffold(
+  Widget build(BuildContext context) {
+    final user = context.select((AuthenticationBloc bloc) => bloc.state.user);
+
+    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+      builder: (context, state) => Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(
+              Icons.person_outline,
+              size: 30,
+            ),
+            onPressed: () {},
+          ),
           elevation: 4,
           backgroundColor: Theme.of(context).primaryColor,
           centerTitle: true,
@@ -40,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
             IconButton(
                 icon: const Icon(
                   Icons.exit_to_app,
-                  size: 28,
+                  size: 30,
                 ),
                 onPressed: () =>
                     context.read<AuthenticationBloc>().add(LogUserOut()))
@@ -107,6 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
+                                    Avatar(photoUrl: user.photo),
                                     Text(
                                       DateFormat.yMd()
                                           .add_jm()
@@ -121,9 +137,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     IconButton(
                                         icon: const Icon(
                                             Icons.delete_outline_sharp),
-                                        onPressed: () => context
-                                            .read<UrlBloc>()
-                                            .add(DeleteUrl(url: url)))
+                                        onPressed: () =>
+                                            _confirmUrlDelete(context, url))
                                   ],
                                 ),
                               )
@@ -144,7 +159,14 @@ class _HomeScreenState extends State<HomeScreen> {
             color: Colors.white,
           ),
         ),
-      );
+        bottomNavigationBar: BlocBuilder<TabBloc, AppTab>(
+            builder: (context, state) => TabSelector(
+                activeTab: state,
+                onTabSelected: (tab) =>
+                    context.read<TabBloc>().add(UpdateTab(tab: tab)))),
+      ),
+    );
+  }
 
   Future<Widget> _buildUrlForm(BuildContext context) => showDialog(
       context: context,
@@ -191,6 +213,45 @@ class _HomeScreenState extends State<HomeScreen> {
               },
               child: Text(
                 'Save',
+                style: TextStyle(
+                    color: Theme.of(context).primaryColor, fontSize: 18),
+              ))
+        ],
+      ));
+
+  Future<Widget> _confirmUrlDelete(BuildContext context, Url url) => showDialog(
+      context: context,
+      child: AlertDialog(
+        content: SizedBox(
+          height: 40,
+          child: Column(
+            children: const [
+              Text('Do you want to delete this url?',
+                  style: TextStyle(
+                    fontSize: 20,
+                  )),
+            ],
+          ),
+        ),
+        actions: [
+          FlatButton(
+              onPressed: () {
+                _urlTextEditingController.clear();
+
+                Navigator.of(context).pop();
+              },
+              child: const Text(
+                'Cancel',
+                style: TextStyle(color: Colors.red, fontSize: 18),
+              )),
+          FlatButton(
+              onPressed: () {
+                context.read<UrlBloc>().add(DeleteUrl(url: url));
+
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                'Confirm',
                 style: TextStyle(
                     color: Theme.of(context).primaryColor, fontSize: 18),
               ))
