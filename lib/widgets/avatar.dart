@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-const _avatarSize = 40.0;
+const _avatarSize = 20.0;
 
 class Avatar extends StatelessWidget {
   final String photoUrl;

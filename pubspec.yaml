@@ -40,6 +40,8 @@ dependencies:
   metadata_fetch: ^0.3.4
   formz: ^0.3.0
   cached_network_image: ^2.5.0
+  uuid: ^2.2.2
+  intl: ^0.16.1
 
 dev_dependencies:
   flutter_test:

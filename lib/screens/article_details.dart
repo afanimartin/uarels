@@ -1,7 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+
+import '../blocs/url/url_bloc.dart';
+import '../blocs/url/url_state.dart';
+import '../widgets/widgets.dart';
 
 class ArticleDetails extends StatelessWidget {
   final String url;
@@ -16,14 +21,21 @@ class ArticleDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.cyan[700],
+          backgroundColor: Theme.of(context).primaryColor,
           title: Text(appBarTitle),
         ),
-        body: WebView(
-          initialUrl: url,
-          javascriptMode: JavascriptMode.unrestricted,
-          onWebViewCreated: (WebViewController webViewController) {
-            _controller.complete(webViewController);
+        body: BlocBuilder<UrlBloc, UrlState>(
+          builder: (context, state) {
+            if (state == null) {
+              return const ProgressLoader();
+            }
+            return WebView(
+              initialUrl: url,
+              javascriptMode: JavascriptMode.unrestricted,
+              onWebViewCreated: (WebViewController webViewController) {
+                _controller.complete(webViewController);
+              },
+            );
           },
         ),
       );

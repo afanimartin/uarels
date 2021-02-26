@@ -22,7 +22,8 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) => MaterialApp(
         debugShowCheckedModeBanner: false,
         navigatorKey: _navigatorKey,
-        theme: ThemeData(accentColor: Colors.cyan[700]),
+        theme: ThemeData(
+            accentColor: Colors.cyan[700], primaryColor: Colors.cyan[700]),
         builder: (context, child) =>
             BlocListener<AuthenticationBloc, AuthenticationState>(
           listener: (context, state) {

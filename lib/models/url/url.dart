@@ -4,15 +4,15 @@ import 'package:flutter/foundation.dart';
 import '../../utils/url_metadata.dart';
 
 class Url extends Equatable {
-  final String userId, urlId, inputUrl, title, description, imageUrl;
+  final String userId, id, inputUrl, title, description, imageUrl;
   final bool isPrivate;
   final Timestamp timestamp;
 
   const Url(
       {@required this.userId,
+      @required this.id,
       @required this.inputUrl,
       @required this.timestamp,
-      this.urlId,
       this.title,
       this.description,
       this.imageUrl,
@@ -20,7 +20,7 @@ class Url extends Equatable {
 
   Url copyWith(
           {String userId,
-          String urlId,
+          String id,
           String inputUrl,
           String title,
           String description,
@@ -29,7 +29,7 @@ class Url extends Equatable {
           Timestamp timestamp}) =>
       Url(
           userId: userId ?? this.userId,
-          urlId: urlId ?? this.urlId,
+          id: id ?? this.id,
           inputUrl: inputUrl ?? this.inputUrl,
           title: title ?? this.title,
           description: description ?? this.description,
@@ -39,7 +39,7 @@ class Url extends Equatable {
 
   factory Url.fromSnapshot(DocumentSnapshot doc) => Url(
       userId: doc.data()['userId'] as String,
-      urlId: doc.id,
+      id: doc.id,
       inputUrl: doc.data()['inputUrl'] as String,
       title: doc.data()['title'] as String,
       description: doc.data()['description'] as String,
@@ -52,7 +52,7 @@ class Url extends Equatable {
 
     return <String, dynamic>{
       'userId': userId,
-      'urlId': urlId,
+      'id': id,
       'inputUrl': inputUrl,
       'title': metadata.title,
       'description': metadata.description,
@@ -63,6 +63,14 @@ class Url extends Equatable {
   }
 
   @override
-  List<Object> get props =>
-      [urlId, inputUrl, title, description, imageUrl, isPrivate];
+  List<Object> get props => [
+        id,
+        userId,
+        inputUrl,
+        title,
+        description,
+        imageUrl,
+        isPrivate,
+        timestamp
+      ];
 }

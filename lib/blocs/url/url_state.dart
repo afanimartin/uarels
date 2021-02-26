@@ -3,14 +3,13 @@ import 'package:flutter/material.dart';
 
 import '../../models/models.dart';
 
-abstract class UrlState extends Equatable {
+class UrlState extends Equatable {
   const UrlState();
 
   @override
   List<Object> get props => [];
 }
 
-class InitialState extends UrlState {}
 
 class UrlsLoading extends UrlState {}
 
@@ -59,13 +58,3 @@ class UrlUpdated extends UrlState {}
 
 class UrlUpdatingFailed extends UrlState {}
 
-class LaunchingUrl extends UrlState {}
-
-class UrlLaunched extends UrlState {
-  final String url;
-
-  const UrlLaunched({@required this.url});
-
-  @override
-  List<Object> get props => [url];
-}

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../models/url/url.dart';
 import '../../repositories/url/url_repository.dart';
@@ -22,7 +23,7 @@ class UrlBloc extends Bloc<UrlEvent, UrlState> {
       @required AuthenticationBloc authenticationBloc})
       : _urlRepository = urlRepository,
         _authenticationBloc = authenticationBloc,
-        super(InitialState());
+        super(const UrlState());
 
   @override
   Stream<UrlState> mapEventToState(UrlEvent event) async* {
@@ -73,7 +74,10 @@ class UrlBloc extends Bloc<UrlEvent, UrlState> {
       final userId = _getCurrentUserId();
 
       final url = Url(
-          userId: userId, inputUrl: event.inputUrl, timestamp: Timestamp.now());
+          userId: userId,
+          id: Uuid().v4(),
+          inputUrl: event.inputUrl,
+          timestamp: Timestamp.now());
 
       await _urlRepository.add(url);
 
@@ -117,6 +121,4 @@ class UrlBloc extends Bloc<UrlEvent, UrlState> {
 
     return super.close();
   }
-
-  Future<void> launchUrl(String url) async {}
 }
