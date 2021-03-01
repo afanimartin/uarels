@@ -27,8 +27,8 @@ class UrlBloc extends Bloc<UrlEvent, UrlState> {
 
   @override
   Stream<UrlState> mapEventToState(UrlEvent event) async* {
-    if (event is LoadUrls) {
-      yield* _mapLoadUrlsToState();
+    if (event is LoadPublicUrls) {
+      yield* _mapLoadPublicUrlsToState();
     } else if (event is UpdateUrls) {
       yield* _mapUrlsUpdatedToState(event);
     } else if (event is AddUrl) {
@@ -37,6 +37,8 @@ class UrlBloc extends Bloc<UrlEvent, UrlState> {
       yield* _mapUpdateUrlToState(event);
     } else if (event is DeleteUrl) {
       yield* _mapDeleteUrlToState(event);
+    } else if (event is MakeUrlPrivate) {
+      yield* _mapMakeUrlPrivate(event);
     }
   }
 
@@ -51,7 +53,7 @@ class UrlBloc extends Bloc<UrlEvent, UrlState> {
     return currentUserId;
   }
 
-  Stream<UrlState> _mapLoadUrlsToState() async* {
+  Stream<UrlState> _mapLoadPublicUrlsToState() async* {
     yield UrlsLoading();
 
     try {
@@ -92,6 +94,18 @@ class UrlBloc extends Bloc<UrlEvent, UrlState> {
 
     try {
       await _urlRepository.update(event.url);
+
+      yield UrlUpdated();
+    } on Exception catch (_) {
+      yield UrlUpdatingFailed();
+    }
+  }
+
+  Stream<UrlState> _mapMakeUrlPrivate(MakeUrlPrivate event) async* {
+    yield UrlUpdating();
+
+    try {
+      await _urlRepository.makeUrlPrivate(event.url);
 
       yield UrlUpdated();
     } on Exception catch (_) {

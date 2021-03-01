@@ -34,7 +34,7 @@ void main() async {
                 urlRepository: UrlRepository(),
                 authenticationBloc: AuthenticationBloc(
                     authenticationRepository: AuthenticationRepository()))
-              ..add(LoadUrls())),
+              ..add(LoadPublicUrls())),
         BlocProvider<LogInCubit>(
           create: (_) =>
               LogInCubit(authenticationRepository: AuthenticationRepository()),

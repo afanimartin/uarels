@@ -1,1 +1,1 @@
-enum AppTab { all, favourites, private }
+enum AppTab { public, favourites, private }

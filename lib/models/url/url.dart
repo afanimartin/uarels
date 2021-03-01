@@ -5,7 +5,7 @@ import '../../utils/url_metadata.dart';
 
 class Url extends Equatable {
   final String userId, id, inputUrl, title, description, imageUrl;
-  final bool isPrivate;
+  final bool isPrivate, isFavorite;
   final Timestamp timestamp;
 
   const Url(
@@ -16,7 +16,8 @@ class Url extends Equatable {
       this.title,
       this.description,
       this.imageUrl,
-      this.isPrivate = false});
+      this.isPrivate = false,
+      this.isFavorite = false});
 
   Url copyWith(
           {String userId,
@@ -26,6 +27,7 @@ class Url extends Equatable {
           String description,
           String imageUrl,
           bool isPrivate,
+          bool isFavorite,
           Timestamp timestamp}) =>
       Url(
           userId: userId ?? this.userId,
@@ -35,7 +37,8 @@ class Url extends Equatable {
           description: description ?? this.description,
           imageUrl: imageUrl ?? this.imageUrl,
           timestamp: timestamp ?? this.timestamp,
-          isPrivate: isPrivate ?? this.isPrivate);
+          isPrivate: isPrivate ?? this.isPrivate,
+          isFavorite: isFavorite ?? this.isFavorite);
 
   factory Url.fromSnapshot(DocumentSnapshot doc) => Url(
       userId: doc.data()['userId'] as String,
@@ -45,7 +48,8 @@ class Url extends Equatable {
       description: doc.data()['description'] as String,
       imageUrl: doc.data()['imageUrl'] as String,
       timestamp: doc.data()['timestamp'] as Timestamp,
-      isPrivate: doc.data()['isPrivate'] as bool);
+      isPrivate: doc.data()['isPrivate'] as bool,
+      isFavorite: doc.data()['isFavorite'] as bool);
 
   Future<Map<String, dynamic>> toDocument() async {
     final metadata = await UrlMetadata.metadata(inputUrl);
@@ -58,6 +62,7 @@ class Url extends Equatable {
       'description': metadata.description,
       'imageUrl': metadata.image,
       'isPrivate': isPrivate,
+      'isFavorite': isFavorite,
       'timestamp': timestamp
     };
   }
@@ -71,6 +76,7 @@ class Url extends Equatable {
         description,
         imageUrl,
         isPrivate,
+        isFavorite,
         timestamp
       ];
 }

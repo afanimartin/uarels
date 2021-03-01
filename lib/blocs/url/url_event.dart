@@ -10,7 +10,9 @@ abstract class UrlEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadUrls extends UrlEvent {}
+class LoadPublicUrls extends UrlEvent {}
+
+class LoadPrivateUrls extends UrlEvent {}
 
 class AddUrl extends UrlEvent {
   final String inputUrl;
@@ -46,6 +48,15 @@ class UpdateUrls extends UrlEvent {
 
   @override
   List<Object> get props => [urls];
+}
+
+class MakeUrlPrivate extends UrlEvent {
+  final Url url;
+
+  const MakeUrlPrivate({@required this.url});
+
+  @override
+  List<Object> get props => [url];
 }
 
 class LaunchUrl extends UrlEvent {

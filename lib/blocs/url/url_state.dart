@@ -10,7 +10,6 @@ class UrlState extends Equatable {
   List<Object> get props => [];
 }
 
-
 class UrlsLoading extends UrlState {}
 
 class UrlsLoaded extends UrlState {
@@ -30,6 +29,21 @@ class UrlsUpdated extends UrlState {
   final List<Url> urls;
 
   const UrlsUpdated({@required this.urls});
+
+  @override
+  List<Object> get props => [urls];
+
+  List<Url> get publicUrls => urls.where((url) => !url.isPrivate).toList();
+
+  List<Url> get privateUrls => urls.where((url) => url.isPrivate).toList();
+
+  List<Url> get favoriteUrls => urls.where((url) => url.isFavorite).toList();
+}
+
+class PrivateUrlsUpdated extends UrlState {
+  final List<Url> urls;
+
+  const PrivateUrlsUpdated({@required this.urls});
 
   @override
   List<Object> get props => [urls];
@@ -57,4 +71,3 @@ class UrlUpdating extends UrlState {}
 class UrlUpdated extends UrlState {}
 
 class UrlUpdatingFailed extends UrlState {}
-

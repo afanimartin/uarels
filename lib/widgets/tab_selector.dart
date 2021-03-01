@@ -14,6 +14,7 @@ class TabSelector extends StatelessWidget {
   Widget build(BuildContext context) => BottomNavigationBar(
       currentIndex: AppTab.values.indexOf(activeTab),
       onTap: (index) => onTabSelected(AppTab.values[index]),
+      backgroundColor: Colors.white,
       items: AppTab.values
           .map((tab) => BottomNavigationBarItem(
               icon: _tabIcon(tab), label: _tabLabel(tab)))
@@ -21,14 +22,14 @@ class TabSelector extends StatelessWidget {
 
   Icon _tabIcon(AppTab tab) {
     switch (tab) {
-      case AppTab.all:
+      case AppTab.public:
         return const Icon(Icons.show_chart);
         break;
       case AppTab.favourites:
         return const Icon(Icons.favorite_outline);
         break;
       case AppTab.private:
-        return const Icon(Icons.privacy_tip_outlined);
+        return const Icon(Icons.lock_outline);
         break;
 
       default:
@@ -39,11 +40,11 @@ class TabSelector extends StatelessWidget {
 
   String _tabLabel(AppTab tab) {
     switch (tab) {
-      case AppTab.all:
+      case AppTab.public:
         return 'All';
         break;
       case AppTab.favourites:
-        return 'Favourites';
+        return 'Favorites';
         break;
       case AppTab.private:
         return 'Private';

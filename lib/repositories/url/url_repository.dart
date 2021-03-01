@@ -29,11 +29,21 @@ class UrlRepository extends IUrlRepository {
   }
 
   @override
-  Stream<List<Url>> urls(String userId) => _firebaseFirestore
-      .collection(Paths.urls)
-      .where('userId', isEqualTo: userId)
-      .snapshots()
-      .map((snapshot) =>
+  Stream<List<Url>> urls(String userId) =>
+      _firebaseFirestore.collection(Paths.urls).snapshots().map((snapshot) =>
           snapshot.docs.map((doc) => Url.fromSnapshot(doc)).toList()
             ..sort((a, b) => b.timestamp.compareTo(a.timestamp)));
+
+  Future<Url> makeUrlPrivate(Url url) async {
+    final updatedUrl = Url(
+        userId: url.userId,
+        id: url.id,
+        inputUrl: url.inputUrl,
+        isPrivate: true,
+        timestamp: Timestamp.now());
+
+    await update(updatedUrl);
+
+    return updatedUrl;
+  }
 }

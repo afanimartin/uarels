@@ -4,7 +4,7 @@ import '../../models/models.dart';
 import 'tab_event.dart';
 
 class TabBloc extends Bloc<TabEvent, AppTab> {
-  TabBloc() : super(AppTab.all);
+  TabBloc() : super(AppTab.public);
 
   @override
   Stream<AppTab> mapEventToState(TabEvent event) async* {
