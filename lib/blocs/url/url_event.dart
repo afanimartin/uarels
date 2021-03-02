@@ -50,20 +50,32 @@ class UpdateUrls extends UrlEvent {
   List<Object> get props => [urls];
 }
 
-class MakeUrlPrivate extends UrlEvent {
+class MakeUrlPrivateOrPublic extends UrlEvent {
   final Url url;
 
-  const MakeUrlPrivate({@required this.url});
+  const MakeUrlPrivateOrPublic({@required this.url});
 
   @override
   List<Object> get props => [url];
 }
 
-class LaunchUrl extends UrlEvent {
-  final String url;
+class AddUrlToFavoritesOrRemove extends UrlEvent {
+  final Url url;
 
-  const LaunchUrl({@required this.url});
+  const AddUrlToFavoritesOrRemove({@required this.url});
 
   @override
   List<Object> get props => [url];
+}
+
+class ShareUrl extends UrlEvent {
+  final String inputUrl;
+  final String subject;
+
+  const ShareUrl(
+      {@required this.inputUrl,
+      this.subject = 'Checkout this awesome article I found on Uarels'});
+
+  @override
+  List<Object> get props => [inputUrl];
 }

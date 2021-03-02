@@ -69,10 +69,21 @@ class RenderArticle extends StatelessWidget {
                   if (user.userId == url.userId)
                     PopupMenuButton<String>(
                         onSelected: handleClick,
-                        itemBuilder: (context) => {'Make private', 'Delete'}
-                            .map((choice) => PopupMenuItem<String>(
-                                value: choice, child: Text(choice)))
-                            .toList())
+                        itemBuilder: (context) => {
+                              if (url.isPrivate)
+                                'Make public'
+                              else
+                                'Make private',
+                              if (url.isFavorite)
+                                'Remove from favorites'
+                              else
+                                'Add to favorites',
+                              'Share url',
+                              'Delete'
+                            }
+                                .map((choice) => PopupMenuItem<String>(
+                                    value: choice, child: Text(choice)))
+                                .toList())
                   else
                     const Text('')
                 ],
@@ -87,7 +98,19 @@ class RenderArticle extends StatelessWidget {
   void handleClick(String value) {
     switch (value) {
       case 'Make private':
-        _bloc.add(MakeUrlPrivate(url: url));
+        _bloc.add(MakeUrlPrivateOrPublic(url: url));
+        break;
+      case 'Make public':
+        _bloc.add(MakeUrlPrivateOrPublic(url: url));
+        break;
+      case 'Add to favorites':
+        _bloc.add(AddUrlToFavoritesOrRemove(url: url));
+        break;
+      case 'Remove from favorites':
+        _bloc.add(AddUrlToFavoritesOrRemove(url: url));
+        break;
+      case 'Share url':
+        _bloc.add(ShareUrl(inputUrl: url.inputUrl));
         break;
       case 'Delete':
         _bloc.add(DeleteUrl(url: url));

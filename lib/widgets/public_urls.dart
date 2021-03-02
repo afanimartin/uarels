@@ -18,7 +18,8 @@ class PublicUrls extends StatelessWidget {
       if (state is UrlsLoading ||
           state is UrlAdding ||
           state is UrlDeleting ||
-          state is UrlUpdating) {
+          state is UrlUpdating ||
+          state is SharingUrl) {
         return const ProgressLoader();
       }
 

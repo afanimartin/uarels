@@ -27,17 +27,20 @@ class UrlsUpdating extends UrlState {}
 
 class UrlsUpdated extends UrlState {
   final List<Url> urls;
+  final String userId;
 
-  const UrlsUpdated({@required this.urls});
+  const UrlsUpdated({@required this.urls, @required this.userId});
 
   @override
   List<Object> get props => [urls];
 
   List<Url> get publicUrls => urls.where((url) => !url.isPrivate).toList();
 
-  List<Url> get privateUrls => urls.where((url) => url.isPrivate).toList();
+  List<Url> get privateUrls =>
+      urls.where((url) => url.isPrivate && userId == url.userId).toList();
 
-  List<Url> get favoriteUrls => urls.where((url) => url.isFavorite).toList();
+  List<Url> get favoriteUrls =>
+      urls.where((url) => url.isFavorite && userId == url.userId).toList();
 }
 
 class PrivateUrlsUpdated extends UrlState {
@@ -57,6 +60,13 @@ class UrlAdding extends UrlState {}
 class UrlAdded extends UrlState {}
 
 class UrlAddingFailed extends UrlState {}
+
+// SHARE EXISTING URL
+class SharingUrl extends UrlState {}
+
+class UrlShared extends UrlState {}
+
+class UrlSharingFailed extends UrlState {}
 
 // DELETE EXISTING URL
 class UrlDeleting extends UrlState {}

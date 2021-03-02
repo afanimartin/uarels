@@ -34,13 +34,26 @@ class UrlRepository extends IUrlRepository {
           snapshot.docs.map((doc) => Url.fromSnapshot(doc)).toList()
             ..sort((a, b) => b.timestamp.compareTo(a.timestamp)));
 
-  Future<Url> makeUrlPrivate(Url url) async {
+  Future<Url> makeUrlPrivateOrPublic(Url url) async {
     final updatedUrl = Url(
         userId: url.userId,
         id: url.id,
         inputUrl: url.inputUrl,
-        isPrivate: true,
-        timestamp: Timestamp.now());
+        isPrivate: !url.isPrivate,
+        timestamp: url.timestamp);
+
+    await update(updatedUrl);
+
+    return updatedUrl;
+  }
+
+  Future<Url> addUrlToFavoritesOrRemove(Url url) async {
+    final updatedUrl = Url(
+        userId: url.userId,
+        id: url.id,
+        inputUrl: url.inputUrl,
+        isFavorite: !url.isFavorite,
+        timestamp: url.timestamp);
 
     await update(updatedUrl);
 

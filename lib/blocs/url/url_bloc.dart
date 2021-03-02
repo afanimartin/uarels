@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:share/share.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../models/url/url.dart';
@@ -37,8 +38,12 @@ class UrlBloc extends Bloc<UrlEvent, UrlState> {
       yield* _mapUpdateUrlToState(event);
     } else if (event is DeleteUrl) {
       yield* _mapDeleteUrlToState(event);
-    } else if (event is MakeUrlPrivate) {
+    } else if (event is MakeUrlPrivateOrPublic) {
       yield* _mapMakeUrlPrivate(event);
+    } else if (event is AddUrlToFavoritesOrRemove) {
+      yield* _mapAddUrlToFavoritesOrRemove(event);
+    } else if (event is ShareUrl) {
+      yield* _mapShareUrlToState(event);
     }
   }
 
@@ -101,15 +106,36 @@ class UrlBloc extends Bloc<UrlEvent, UrlState> {
     }
   }
 
-  Stream<UrlState> _mapMakeUrlPrivate(MakeUrlPrivate event) async* {
+  Stream<UrlState> _mapMakeUrlPrivate(MakeUrlPrivateOrPublic event) async* {
     yield UrlUpdating();
 
     try {
-      await _urlRepository.makeUrlPrivate(event.url);
+      await _urlRepository.makeUrlPrivateOrPublic(event.url);
 
       yield UrlUpdated();
     } on Exception catch (_) {
       yield UrlUpdatingFailed();
+    }
+  }
+
+  Stream<UrlState> _mapAddUrlToFavoritesOrRemove(
+      AddUrlToFavoritesOrRemove event) async* {
+    yield UrlUpdating();
+
+    try {
+      await _urlRepository.addUrlToFavoritesOrRemove(event.url);
+
+      yield UrlUpdated();
+    } on Exception catch (_) {
+      yield UrlUpdatingFailed();
+    }
+  }
+
+  Stream<UrlState> _mapShareUrlToState(ShareUrl event) async* {
+    try {
+      await Share.share(event.inputUrl, subject: event.subject);
+    } on Exception catch (_) {
+      yield UrlSharingFailed();
     }
   }
 
@@ -126,7 +152,9 @@ class UrlBloc extends Bloc<UrlEvent, UrlState> {
   }
 
   Stream<UrlState> _mapUrlsUpdatedToState(UpdateUrls event) async* {
-    yield UrlsUpdated(urls: event.urls);
+    final currentUserId = _getCurrentUserId();
+
+    yield UrlsUpdated(urls: event.urls, userId: currentUserId);
   }
 
   @override
