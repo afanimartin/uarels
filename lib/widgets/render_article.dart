@@ -62,30 +62,29 @@ class RenderArticle extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Avatar(photoUrl: url.),
+                  // Avatar(photoUrl: url.photoUrl),
                   Text(
                     DateFormat.yMd().add_jm().format(url.timestamp.toDate()),
                   ),
-                  if (user.userId == url.userId)
-                    PopupMenuButton<String>(
-                        onSelected: handleClick,
-                        itemBuilder: (context) => {
+
+                  PopupMenuButton<String>(
+                      onSelected: handleClick,
+                      itemBuilder: (context) => {
+                            if (user.userId == url.userId)
                               if (url.isPrivate)
                                 'Make public'
                               else
                                 'Make private',
-                              if (url.isFavorite)
-                                'Remove from favorites'
-                              else
-                                'Add to favorites',
-                              'Share url',
-                              'Delete'
-                            }
-                                .map((choice) => PopupMenuItem<String>(
-                                    value: choice, child: Text(choice)))
-                                .toList())
-                  else
-                    const Text('')
+                            if (user.userId == url.userId) 'Delete',
+                            if (url.isFavorite && user.userId == url.userId)
+                              'Remove from favorites'
+                            else
+                              'Add to favorites',
+                            'Share url',
+                          }
+                              .map((choice) => PopupMenuItem<String>(
+                                  value: choice, child: Text(choice)))
+                              .toList())
                 ],
               ),
             )

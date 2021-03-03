@@ -40,6 +40,7 @@ class UrlRepository extends IUrlRepository {
         id: url.id,
         inputUrl: url.inputUrl,
         isPrivate: !url.isPrivate,
+        isFavorite: url.isFavorite,
         timestamp: url.timestamp);
 
     await update(updatedUrl);
@@ -52,6 +53,7 @@ class UrlRepository extends IUrlRepository {
         userId: url.userId,
         id: url.id,
         inputUrl: url.inputUrl,
+        isPrivate: url.isPrivate,
         isFavorite: !url.isFavorite,
         timestamp: url.timestamp);
 

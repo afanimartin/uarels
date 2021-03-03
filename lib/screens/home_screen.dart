@@ -5,7 +5,6 @@ import '../blocs/authentication/authentication_event.dart';
 import '../blocs/blocs.dart';
 import '../blocs/tab/tab_bloc.dart';
 import '../blocs/tab/tab_event.dart';
-import '../blocs/url/url_event.dart';
 import '../models/models.dart';
 import '../widgets/favorite_urls.dart';
 import '../widgets/private_urls.dart';
@@ -69,56 +68,32 @@ class _HomeScreenState extends State<HomeScreen> {
                     context.read<TabBloc>().add(UpdateTab(tab: tab)))),
       );
 
-  Future<Widget> _buildUrlForm(BuildContext context) => showDialog(
+  Future<Widget> _buildUrlForm(BuildContext context) => showModalBottomSheet(
       context: context,
-      child: AlertDialog(
-        content: SizedBox(
-          height: 100,
-          child: Column(
-            children: [
-              const Text('Add new url'),
-              TextField(
-                controller: _urlTextEditingController,
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Theme.of(context).accentColor),
-                        borderRadius: BorderRadius.circular(5)),
-                    hintText: 'Enter url link'),
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          FlatButton(
-              onPressed: () {
-                _urlTextEditingController.clear();
-
-                Navigator.of(context).pop();
-              },
-              child: const Text(
-                'Cancel',
-                style: TextStyle(color: Colors.red, fontSize: 18),
-              )),
-          FlatButton(
-              onPressed: () {
-                if (_urlTextEditingController.text.isNotEmpty) {
-                  context
-                      .read<UrlBloc>()
-                      .add(AddUrl(inputUrl: _urlTextEditingController.text));
-
-                  _urlTextEditingController.clear();
-
-                  Navigator.of(context).pop();
-                }
-              },
-              child: Text(
-                'Save',
-                style: TextStyle(
-                    color: Theme.of(context).primaryColor, fontSize: 18),
-              ))
-        ],
-      ));
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      builder: (context) => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: TextField(
+                    controller: _urlTextEditingController,
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Theme.of(context).accentColor),
+                            borderRadius: BorderRadius.circular(5)),
+                        hintText: 'Paste url link'),
+                  ),
+                ),
+              ],
+            ),
+          ));
 
   Widget _renderUrls(AppTab state) {
     switch (state) {
