@@ -39,15 +39,6 @@ class UpdateUrl extends PublicUrlEvent {
   List<Object> get props => [url];
 }
 
-class DeleteUrl extends PublicUrlEvent {
-  final Url url;
-
-  const DeleteUrl({@required this.url});
-
-  @override
-  List<Object> get props => [url];
-}
-
 class AddUrlToPrivate extends PublicUrlEvent {
   final Url url;
 

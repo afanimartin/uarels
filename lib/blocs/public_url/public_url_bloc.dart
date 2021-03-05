@@ -36,8 +36,6 @@ class PublicUrlBloc extends Bloc<PublicUrlEvent, PublicUrlState> {
       yield* _mapUrlsUpdatedToState(event);
     } else if (event is AddUrl) {
       yield* _mapAddUrlToState(event);
-    } else if (event is DeleteUrl) {
-      yield* _mapDeleteUrlToState(event);
     } else if (event is AddUrlToPrivate) {
       yield* _mapAddUrlToPrivate(event);
     }else if (event is ShareUrl) {
@@ -92,18 +90,6 @@ class PublicUrlBloc extends Bloc<PublicUrlEvent, PublicUrlState> {
       await Share.share(event.inputUrl, subject: event.subject);
     } on Exception catch (_) {
       yield UrlSharingFailed();
-    }
-  }
-
-  Stream<PublicUrlState> _mapDeleteUrlToState(DeleteUrl event) async* {
-    yield UrlDeleting();
-
-    try {
-      await _urlRepository.delete(event.url);
-
-      yield UrlDeleted();
-    } on Exception catch (_) {
-      yield UrlDeletingFailed();
     }
   }
 
