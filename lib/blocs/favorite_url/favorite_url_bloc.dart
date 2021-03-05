@@ -61,18 +61,23 @@ class FavoriteUrlBloc extends Bloc<FavoriteUrlEvent, FavoriteUrlState> {
 
   Stream<FavoriteUrlState> _mapAddUrlToFavorites(
       AddUrlToFavorites event) async* {
+    yield AddingToFavorites();
+
     try {
       final currentUserId = _currentUserId.getCurrentUserId();
 
-      final url = Url(
+      final updatedUrl = Url(
           userId: currentUserId,
           id: event.url.id,
           inputUrl: event.url.inputUrl,
-          isFavorite: true,
           timestamp: Timestamp.now());
 
-      await _urlRepository.addUrlToFavorites(url);
-    } on Exception catch (_) {}
+      await _urlRepository.addUrlToFavorites(updatedUrl);
+
+      yield AddedToFavorites();
+    } on Exception catch (_) {
+      yield AddingToFavoritesFailed();
+    }
   }
 
   Stream<FavoriteUrlState> _mapRemoveFromFavoritesToState(

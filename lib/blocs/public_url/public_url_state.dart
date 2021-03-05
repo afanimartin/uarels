@@ -37,7 +37,6 @@ class PublicUrlsUpdated extends PublicUrlState {
   List<Url> get publicUrls => urls.where((url) => !url.isPrivate).toList();
 }
 
-
 class PublicUrlsUpdatingFailed extends PublicUrlState {}
 
 // ADD NEW URL
@@ -61,3 +60,9 @@ class UrlDeleted extends PublicUrlState {}
 
 class UrlDeletingFailed extends PublicUrlState {}
 
+// ADD URL TO FAVORITES/PRIVATE
+class AddingUrl extends PublicUrlState {}
+
+class AddedUrl extends PublicUrlState {}
+
+class AddingUrlFailed extends PublicUrlState {}

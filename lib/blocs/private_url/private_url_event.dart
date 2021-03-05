@@ -29,5 +29,3 @@ class AddUrlToPublic extends PrivateUrlEvent {
   @override
   List<Object> get props => [url];
 }
-
-class DeleteUrl extends PrivateUrlEvent {}

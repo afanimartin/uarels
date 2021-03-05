@@ -29,6 +29,8 @@ class PrivateUrlBloc extends Bloc<PrivateUrlEvent, PrivateUrlState> {
       yield* _mapLoadUrlsToState();
     } else if (event is UpdateUrls) {
       yield* _mapUpdateUrlsToState(event);
+    } else if (event is AddUrlToPublic) {
+      yield* _mapAddUrlToPublicState(event);
     }
   }
 
@@ -49,6 +51,20 @@ class PrivateUrlBloc extends Bloc<PrivateUrlEvent, PrivateUrlState> {
   }
 
   Stream<PrivateUrlState> _mapUpdateUrlsToState(UpdateUrls event) async* {
-    yield PrivateUrlsUpdated(urls: event.urls);
+    final currentUserId = _currentUserId.getCurrentUserId();
+
+    yield PrivateUrlsUpdated(urls: event.urls, userId: currentUserId);
+  }
+
+  Stream<PrivateUrlState> _mapAddUrlToPublicState(AddUrlToPublic event) async* {
+    yield AddingUrlToPublic();
+
+    try {
+      await _urlRepository.addToPublic(event.url);
+
+      yield UrlAddedToPublic();
+    } on Exception catch (_) {
+      yield UrlAddingToPublicFailed();
+    }
   }
 }

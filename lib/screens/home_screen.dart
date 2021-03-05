@@ -1,3 +1,4 @@
+import 'package:Uarels/blocs/favorite_url/favorite_url_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -54,12 +55,17 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
             body: _renderUrls(state),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () => _buildUrlForm(context),
-              backgroundColor: Theme.of(context).primaryColor,
-              child: const Icon(
-                Icons.add,
-                color: Colors.white,
+            floatingActionButton:
+                BlocBuilder<FavoriteUrlBloc, FavoriteUrlState>(
+              builder: (context, state) => FloatingActionButton(
+                onPressed: () => _buildUrlForm(context),
+                backgroundColor: Theme.of(context).primaryColor,
+                child: state is AddingToFavorites
+                    ? const ProgressLoader()
+                    : const Icon(
+                        Icons.add,
+                        color: Colors.white,
+                      ),
               ),
             ),
             bottomNavigationBar: TabSelector(

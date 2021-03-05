@@ -38,7 +38,7 @@ class PublicUrlBloc extends Bloc<PublicUrlEvent, PublicUrlState> {
       yield* _mapAddUrlToState(event);
     } else if (event is AddUrlToPrivate) {
       yield* _mapAddUrlToPrivate(event);
-    }else if (event is ShareUrl) {
+    } else if (event is ShareUrl) {
       yield* _mapShareUrlToState(event);
     }
   }
@@ -80,9 +80,14 @@ class PublicUrlBloc extends Bloc<PublicUrlEvent, PublicUrlState> {
   }
 
   Stream<PublicUrlState> _mapAddUrlToPrivate(AddUrlToPrivate event) async* {
+    yield AddingUrl();
     try {
       await _urlRepository.addUrlToPrivate(event.url);
-    } on Exception catch (_) {}
+
+      yield AddedUrl();
+    } on Exception catch (_) {
+      yield AddingUrlFailed();
+    }
   }
 
   Stream<PublicUrlState> _mapShareUrlToState(ShareUrl event) async* {

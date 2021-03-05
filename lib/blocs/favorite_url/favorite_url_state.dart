@@ -38,6 +38,13 @@ class UrlsUpdated extends FavoriteUrlState {
 
 class UrlsUpdatingFailed extends FavoriteUrlState {}
 
+// ADDING TO FAVORITES
+class AddingToFavorites extends FavoriteUrlState {}
+
+class AddedToFavorites extends FavoriteUrlState {}
+
+class AddingToFavoritesFailed extends FavoriteUrlState {}
+
 // Remove Url
 class RemovingUrl extends FavoriteUrlState {}
 
