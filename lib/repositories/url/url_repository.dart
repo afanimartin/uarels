@@ -34,6 +34,14 @@ class UrlRepository extends IUrlRepository {
           snapshot.docs.map((doc) => Url.fromSnapshot(doc)).toList()
             ..sort((a, b) => b.timestamp.compareTo(a.timestamp)));
 
+  Stream<List<Url>> favoriteUrls(String userId) => _firebaseFirestore
+      .collection(Paths.favorites)
+      .where('userId', isEqualTo: userId)
+      .snapshots()
+      .map((snapshot) =>
+          snapshot.docs.map((doc) => Url.fromSnapshot(doc)).toList()
+            ..sort((a, b) => b.timestamp.compareTo(a.timestamp)));
+
   Future<Url> makeUrlPrivateOrPublic(Url url) async {
     final updatedUrl = Url(
         userId: url.userId,
@@ -48,17 +56,24 @@ class UrlRepository extends IUrlRepository {
     return updatedUrl;
   }
 
-  Future<Url> addUrlToFavoritesOrRemove(Url url) async {
-    final updatedUrl = Url(
-        userId: url.userId,
-        id: url.id,
-        inputUrl: url.inputUrl,
-        isPrivate: url.isPrivate,
-        isFavorite: !url.isFavorite,
-        timestamp: url.timestamp);
+  Future<Url> addUrlToFavorites(Url url) async {
+    await _firebaseFirestore
+        .collection(Paths.favorites)
+        .add(await url.toDocument());
 
-    await update(updatedUrl);
+    return url;
+  }
 
-    return updatedUrl;
+  Future<void> removeFromFavorites(Url url) async {
+    await _firebaseFirestore.collection(Paths.favorites).doc(url.id).delete();
+  }
+
+  Future<Url> addUrlToPrivate(Url url) async {
+    await _firebaseFirestore
+        .collection(Paths.private)
+        .doc(url.id)
+        .set(await url.toDocument());
+
+    return url;
   }
 }

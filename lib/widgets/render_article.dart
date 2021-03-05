@@ -4,7 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 import '../blocs/blocs.dart';
-import '../blocs/url/url_event.dart';
+import '../blocs/favorite_url/favorite_url_event.dart';
+import '../blocs/public_url/public_url_event.dart';
 import '../models/models.dart';
 import '../screens/article_details.dart';
 
@@ -15,11 +16,13 @@ class RenderArticle extends StatelessWidget {
   RenderArticle({@required this.url, @required this.user, Key key})
       : super(key: key);
 
-  UrlBloc _bloc;
+  PublicUrlBloc _bloc;
+  FavoriteUrlBloc _favoriteUrlBloc;
 
   @override
   Widget build(BuildContext context) {
-    _bloc = BlocProvider.of<UrlBloc>(context);
+    _bloc = BlocProvider.of<PublicUrlBloc>(context);
+    _favoriteUrlBloc = BlocProvider.of<FavoriteUrlBloc>(context);
 
     return GestureDetector(
       onTap: () => Navigator.of(context).push(MaterialPageRoute(
@@ -97,22 +100,24 @@ class RenderArticle extends StatelessWidget {
   void handleClick(String value) {
     switch (value) {
       case 'Make private':
-        _bloc.add(MakeUrlPrivateOrPublic(url: url));
+        _bloc.add(AddUrlToPrivate(url: url));
         break;
       case 'Make public':
-        _bloc.add(MakeUrlPrivateOrPublic(url: url));
+        _bloc.add(AddUrlToPrivate(url: url));
         break;
       case 'Add to favorites':
-        _bloc.add(AddUrlToFavoritesOrRemove(url: url));
+        user.userId != url.userId
+            ? _favoriteUrlBloc.add(AddUrlToFavorites(url: url))
+            : print('Favorites');
         break;
       case 'Remove from favorites':
-        _bloc.add(AddUrlToFavoritesOrRemove(url: url));
+        _favoriteUrlBloc.add(RemoveFromFavorites(url: url));
         break;
       case 'Share url':
-        _bloc.add(ShareUrl(inputUrl: url.inputUrl));
+        // _bloc.add(ShareUrl(inputUrl: url.inputUrl));
         break;
       case 'Delete':
-        _bloc.add(DeleteUrl(url: url));
+        // _bloc.add(DeleteUrl(url: url));
         break;
 
       default:

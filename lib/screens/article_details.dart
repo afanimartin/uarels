@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-import '../blocs/url/url_bloc.dart';
-import '../blocs/url/url_state.dart';
+import '../blocs/blocs.dart';
+import '../blocs/public_url/public_url_state.dart';
 import '../widgets/widgets.dart';
 
 class ArticleDetails extends StatelessWidget {
@@ -24,7 +24,7 @@ class ArticleDetails extends StatelessWidget {
           backgroundColor: Theme.of(context).primaryColor,
           title: Text(appBarTitle),
         ),
-        body: BlocBuilder<UrlBloc, UrlState>(
+        body: BlocBuilder<PublicUrlBloc, PublicUrlState>(
           builder: (context, state) {
             if (state == null) {
               return const ProgressLoader();

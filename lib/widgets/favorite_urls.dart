@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../blocs/blocs.dart';
-import '../blocs/url/url_state.dart';
+import '../blocs/favorite_url/favorite_url_state.dart';
 import 'progress_loader.dart';
 import 'render_article.dart';
 
@@ -13,18 +13,19 @@ class FavoriteUrls extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = context.select((AuthenticationBloc bloc) => bloc.state.user);
 
-    return BlocBuilder<UrlBloc, UrlState>(builder: (context, state) {
-      if (state is UrlsLoading || state is UrlAdding || state is UrlDeleting) {
+    return BlocBuilder<FavoriteUrlBloc, FavoriteUrlState>(
+        builder: (context, state) {
+      if (state is UrlsLoading || state is RemovingUrl) {
         return const ProgressLoader();
       }
 
       if (state is UrlsUpdated) {
-        return state.favoriteUrls.isEmpty
+        return state.urls.isEmpty
             ? const Center(child: Text('No favorite urls to load'))
             : ListView.builder(
-                itemCount: state?.favoriteUrls?.length,
+                itemCount: state?.urls?.length,
                 itemBuilder: (context, index) {
-                  final url = state.favoriteUrls[index];
+                  final url = state.urls[index];
 
                   return RenderArticle(
                     url: url,
@@ -34,7 +35,7 @@ class FavoriteUrls extends StatelessWidget {
                 });
       }
 
-      return const Text('');
+      return const Center(child: Text('No data'));
     });
   }
 }

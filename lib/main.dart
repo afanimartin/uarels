@@ -5,10 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'blocs/blocs.dart';
+import 'blocs/favorite_url/favorite_url_event.dart';
 import 'blocs/log_in/log_in_bloc.dart';
+import 'blocs/public_url/public_url_event.dart';
 import 'blocs/simple_bloc_observer.dart';
 import 'blocs/tab/tab_bloc.dart';
-import 'blocs/url/url_event.dart';
 import 'repositories/repositories.dart';
 import 'repositories/url/url_repository.dart';
 import 'screens/screens.dart';
@@ -29,18 +30,20 @@ void main() async {
           create: (_) => AuthenticationBloc(
               authenticationRepository: AuthenticationRepository()),
         ),
-        BlocProvider<UrlBloc>(
-            create: (_) => UrlBloc(
-                urlRepository: UrlRepository(),
-                authenticationBloc: AuthenticationBloc(
-                    authenticationRepository: AuthenticationRepository()))
-              ..add(LoadPublicUrls())),
+        BlocProvider<PublicUrlBloc>(
+            create: (_) => PublicUrlBloc(
+                  urlRepository: UrlRepository(),
+                )..add(LoadPublicUrls())),
         BlocProvider<LogInCubit>(
           create: (_) =>
               LogInCubit(authenticationRepository: AuthenticationRepository()),
         ),
         BlocProvider<TabBloc>(
           create: (_) => TabBloc(),
+        ),
+        BlocProvider<FavoriteUrlBloc>(
+          create: (_) =>
+              FavoriteUrlBloc(urlRepository: UrlRepository())..add(const LoadUrls()),
         )
       ],
       child: const App(),

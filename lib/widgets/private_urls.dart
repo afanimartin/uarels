@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../blocs/authentication/authentication_bloc.dart';
-import '../blocs/url/url_bloc.dart';
-import '../blocs/url/url_state.dart';
+import '../blocs/blocs.dart';
+import '../blocs/public_url/public_url_state.dart';
 import 'progress_loader.dart';
 import 'render_article.dart';
 
@@ -14,12 +14,12 @@ class PrivateUrls extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = context.select((AuthenticationBloc bloc) => bloc.state.user);
 
-    return BlocBuilder<UrlBloc, UrlState>(builder: (context, state) {
-      if (state is UrlsLoading || state is UrlAdding || state is UrlDeleting) {
+    return BlocBuilder<PublicUrlBloc, PublicUrlState>(builder: (context, state) {
+      if (state is PublicUrlsLoading || state is UrlAdding || state is UrlDeleting) {
         return const ProgressLoader();
       }
 
-      if (state is UrlsUpdated) {
+      if (state is PublicUrlsUpdated) {
         return state.privateUrls.isEmpty
             ? const Center(child: Text('No private urls to load'))
             : ListView.builder(
