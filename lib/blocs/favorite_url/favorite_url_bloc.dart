@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:Uarels/utils/paths.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -45,10 +46,8 @@ class FavoriteUrlBloc extends Bloc<FavoriteUrlEvent, FavoriteUrlState> {
     try {
       await _favoriteUrlStreamSubscription?.cancel();
 
-      final currentUserId = _currentUserId.getCurrentUserId();
-
       _favoriteUrlStreamSubscription = _urlRepository
-          .favoriteUrls(currentUserId)
+          .favoriteUrls()
           .listen((urls) => add(UpdateUrls(urls: urls)));
     } on Exception catch (_) {
       yield UrlsLoadingFailed();
@@ -72,7 +71,7 @@ class FavoriteUrlBloc extends Bloc<FavoriteUrlEvent, FavoriteUrlState> {
           inputUrl: event.url.inputUrl,
           timestamp: Timestamp.now());
 
-      await _urlRepository.addUrlToFavorites(updatedUrl);
+      await _urlRepository.add(Paths.favorites, updatedUrl);
 
       yield AddedToFavorites();
     } on Exception catch (_) {
@@ -85,7 +84,7 @@ class FavoriteUrlBloc extends Bloc<FavoriteUrlEvent, FavoriteUrlState> {
     yield RemovingUrl();
 
     try {
-      await _urlRepository.removeFromFavorites(event.url);
+      await _urlRepository.delete(Paths.favorites, event.url);
 
       yield UrlRemoved();
     } on Exception catch (_) {

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:Uarels/utils/paths.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -49,10 +50,8 @@ class PublicUrlBloc extends Bloc<PublicUrlEvent, PublicUrlState> {
     try {
       await _urlStreamSubscription?.cancel();
 
-      final userId = _currentUserId.getCurrentUserId();
-
       _urlStreamSubscription = _urlRepository
-          .urls(userId)
+          .publicUrls()
           .listen((urls) => add(UpdateUrls(urls: urls)));
     } on Exception catch (_) {
       yield PublicUrlsLoadingFailed();
@@ -71,7 +70,7 @@ class PublicUrlBloc extends Bloc<PublicUrlEvent, PublicUrlState> {
           inputUrl: event.inputUrl,
           timestamp: Timestamp.now());
 
-      await _urlRepository.add(url);
+      await _urlRepository.add(Paths.public, url);
 
       yield UrlAdded();
     } on Exception catch (_) {
@@ -82,7 +81,7 @@ class PublicUrlBloc extends Bloc<PublicUrlEvent, PublicUrlState> {
   Stream<PublicUrlState> _mapAddUrlToPrivate(AddUrlToPrivate event) async* {
     yield AddingUrl();
     try {
-      await _urlRepository.addUrlToPrivate(event.url);
+      await _urlRepository.add(Paths.private, event.url);
 
       yield AddedUrl();
     } on Exception catch (_) {

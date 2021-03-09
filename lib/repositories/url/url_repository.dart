@@ -11,74 +11,40 @@ class UrlRepository extends IUrlRepository {
       : _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
   @override
-  Future<void> add(Url url) async {
-    await _firebaseFirestore.collection(Paths.urls).add(await url.toDocument());
+  Future<void> add(String collection, Url url) async {
+    await _firebaseFirestore.collection(collection).add(await url.toDocument());
   }
 
   @override
-  Future<void> update(Url url) async {
+  Future<void> update(String collection, Url url) async {
     await _firebaseFirestore
-        .collection(Paths.urls)
+        .collection(collection)
         .doc(url.id)
         .update(await url.toDocument());
   }
 
   @override
-  Future<void> delete(Url url) async {
-    await _firebaseFirestore.collection(Paths.urls).doc(url.id).delete();
+  Future<void> delete(String collection, Url url) async {
+    await _firebaseFirestore.collection(collection).doc(url.id).delete();
   }
 
   @override
-  Stream<List<Url>> urls(String userId) =>
-      _firebaseFirestore.collection(Paths.urls).snapshots().map((snapshot) =>
+  Stream<List<Url>> publicUrls() =>
+      _firebaseFirestore.collection(Paths.public).snapshots().map((snapshot) =>
           snapshot.docs.map((doc) => Url.fromSnapshot(doc)).toList()
             ..sort((a, b) => b.timestamp.compareTo(a.timestamp)));
 
-  Stream<List<Url>> favoriteUrls(String userId) => _firebaseFirestore
+  @override
+  Stream<List<Url>> privateUrls() =>
+      _firebaseFirestore.collection(Paths.private).snapshots().map((snapshot) =>
+          snapshot.docs.map((doc) => Url.fromSnapshot(doc)).toList()
+            ..sort((a, b) => b.timestamp.compareTo(a.timestamp)));
+
+  @override
+  Stream<List<Url>> favoriteUrls() => _firebaseFirestore
       .collection(Paths.favorites)
-      .where('userId', isEqualTo: userId)
       .snapshots()
       .map((snapshot) =>
           snapshot.docs.map((doc) => Url.fromSnapshot(doc)).toList()
             ..sort((a, b) => b.timestamp.compareTo(a.timestamp)));
-
-  Future<Url> addToPublic(Url url) async {
-    final updatedUrl = Url(
-        userId: url.userId,
-        id: url.id,
-        inputUrl: url.inputUrl,
-        isPrivate: !url.isPrivate,
-        isFavorite: url.isFavorite,
-        timestamp: url.timestamp);
-
-    await update(updatedUrl);
-
-    return updatedUrl;
-  }
-
-  Future<Url> addUrlToFavorites(Url url) async {
-    await _firebaseFirestore
-        .collection(Paths.favorites)
-        .add(await url.toDocument());
-
-    return url;
-  }
-
-  Future<void> removeFromFavorites(Url url) async {
-    await _firebaseFirestore.collection(Paths.favorites).doc(url.id).delete();
-  }
-
-  Future<Url> addUrlToPrivate(Url url) async {
-    final updatedUrl = Url(
-        userId: url.userId,
-        id: url.id,
-        inputUrl: url.inputUrl,
-        isPrivate: true,
-        isFavorite: url.isFavorite,
-        timestamp: url.timestamp);
-
-    await update(updatedUrl);
-
-    return updatedUrl;
-  }
 }
