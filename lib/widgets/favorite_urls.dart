@@ -1,24 +1,29 @@
-import 'package:Uarels/blocs/favorite_url/favorite_url_event.dart';
-import 'package:Uarels/blocs/private_url/private_url_event.dart';
-import 'package:Uarels/models/models.dart';
-import 'package:Uarels/screens/article_details.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 import '../blocs/blocs.dart';
+import '../blocs/favorite_url/favorite_url_event.dart';
 import '../blocs/favorite_url/favorite_url_state.dart';
+import '../models/models.dart';
+import '../screens/article_details.dart';
 import 'progress_loader.dart';
-class FavoriteUrls extends StatelessWidget {
+
+class FavoriteUrls extends StatefulWidget {
   const FavoriteUrls({Key key}) : super(key: key);
 
+  @override
+  _FavoriteUrlsState createState() => _FavoriteUrlsState();
+}
+
+class _FavoriteUrlsState extends State<FavoriteUrls> {
   @override
   Widget build(BuildContext context) {
     final user = context.select((AuthenticationBloc bloc) => bloc.state.user);
 
     return BlocBuilder<FavoriteUrlBloc, FavoriteUrlState>(
-        builder: (context, state) {
+       builder: (context, state) {
       if (state is UrlsLoading || state is RemovingUrl) {
         return const ProgressLoader();
       }
@@ -39,7 +44,7 @@ class FavoriteUrls extends StatelessWidget {
                 });
       }
 
-      return const Center(child: Text('No data'));
+      return const Center(child: Text('Failed to connect to the server'));
     });
   }
 }

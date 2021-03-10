@@ -29,15 +29,11 @@ class PrivateUrlsUpdating extends PrivateUrlState {}
 
 class PrivateUrlsUpdated extends PrivateUrlState {
   final List<Url> urls;
-  final String userId;
 
-  const PrivateUrlsUpdated({@required this.urls, @required this.userId});
+  const PrivateUrlsUpdated({@required this.urls});
 
   @override
-  List<Object> get props => [urls, userId];
-
-  List<Url> get privateUrls =>
-      urls.where((url) => url.isPrivate && url.userId == userId).toList();
+  List<Object> get props => [urls];
 }
 
 class PrivateUrlsUpdatingFailed extends PrivateUrlState {}

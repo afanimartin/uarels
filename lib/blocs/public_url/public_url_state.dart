@@ -33,8 +33,6 @@ class PublicUrlsUpdated extends PublicUrlState {
 
   @override
   List<Object> get props => [urls];
-
-  List<Url> get publicUrls => urls.where((url) => !url.isPrivate).toList();
 }
 
 class PublicUrlsUpdatingFailed extends PublicUrlState {}

@@ -8,6 +8,7 @@ import '../../helpers/bloc/current_user_id.dart';
 import '../../models/models.dart';
 import '../../repositories/repositories.dart';
 import '../../repositories/url/url_repository.dart';
+import '../../utils/paths.dart';
 import '../blocs.dart';
 import 'favorite_url_event.dart';
 import 'favorite_url_state.dart';
@@ -72,7 +73,7 @@ class FavoriteUrlBloc extends Bloc<FavoriteUrlEvent, FavoriteUrlState> {
           inputUrl: event.url.inputUrl,
           timestamp: Timestamp.now());
 
-      await _urlRepository.addUrlToFavorites(updatedUrl);
+      await _urlRepository.add(Paths.favorites, updatedUrl);
 
       yield AddedToFavorites();
     } on Exception catch (_) {
@@ -85,7 +86,7 @@ class FavoriteUrlBloc extends Bloc<FavoriteUrlEvent, FavoriteUrlState> {
     yield RemovingUrl();
 
     try {
-      await _urlRepository.removeFromFavorites(event.url);
+      await _urlRepository.delete(Paths.favorites, event.url);
 
       yield UrlRemoved();
     } on Exception catch (_) {
