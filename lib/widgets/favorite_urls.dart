@@ -1,14 +1,13 @@
-import 'package:Uarels/blocs/favorite_url/favorite_url_event.dart';
-import 'package:Uarels/blocs/private_url/private_url_event.dart';
-import 'package:Uarels/models/models.dart';
-import 'package:Uarels/screens/article_details.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 import '../blocs/blocs.dart';
+import '../blocs/favorite_url/favorite_url_event.dart';
 import '../blocs/favorite_url/favorite_url_state.dart';
+import '../models/models.dart';
+import '../screens/article_details.dart';
 import 'progress_loader.dart';
 class FavoriteUrls extends StatelessWidget {
   const FavoriteUrls({Key key}) : super(key: key);

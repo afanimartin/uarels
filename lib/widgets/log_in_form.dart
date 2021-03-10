@@ -33,12 +33,9 @@ class _GoogleLogInButton extends StatelessWidget {
   const _GoogleLogInButton({Key key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => FlatButton(
-        padding: const EdgeInsets.all(16),
+  Widget build(BuildContext context) => ElevatedButton(
         key: const Key('google_log_in_button'),
         onPressed: () => context.read<LogInCubit>().logInWithGoogle(),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-        color: Theme.of(context).accentColor,
         child: const Text('Sign in with Google',
             style: TextStyle(color: Colors.white, fontSize: 20)),
       );
