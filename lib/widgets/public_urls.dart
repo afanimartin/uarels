@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 import '../blocs/authentication/authentication_bloc.dart';
 import '../blocs/blocs.dart';
@@ -107,9 +107,7 @@ class _RenderPublicUrl extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   // Avatar(photoUrl: url.photoUrl),
-                  Text(
-                    DateFormat.yMd().add_jm().format(url.timestamp.toDate()),
-                  ),
+                  Text(timeago.format(url.timestamp.toDate())),
 
                   PopupMenuButton<String>(
                       onSelected: handleClick,
