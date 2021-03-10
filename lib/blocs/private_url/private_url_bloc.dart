@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:Uarels/utils/paths.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -41,9 +40,10 @@ class PrivateUrlBloc extends Bloc<PrivateUrlEvent, PrivateUrlState> {
     try {
       await _privateUrlsStreamSubscription?.cancel();
 
+      final currentUserId = _currentUserId.getCurrentUserId();
 
       _privateUrlsStreamSubscription = _urlRepository
-          .privateUrls()
+          .privateUrls(currentUserId)
           .listen((urls) => add(UpdateUrls(urls: urls)));
     } on Exception catch (_) {
       yield PrivateUrlsUpdatingFailed();
@@ -58,7 +58,7 @@ class PrivateUrlBloc extends Bloc<PrivateUrlEvent, PrivateUrlState> {
     yield AddingUrlToPublic();
 
     try {
-      await _urlRepository.add(Paths.public, event.url);
+      await _urlRepository.addToPublic(event.url);
 
       yield UrlAddedToPublic();
     } on Exception catch (_) {

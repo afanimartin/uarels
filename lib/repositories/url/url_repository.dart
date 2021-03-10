@@ -35,16 +35,25 @@ class UrlRepository extends IUrlRepository {
             ..sort((a, b) => b.timestamp.compareTo(a.timestamp)));
 
   @override
-  Stream<List<Url>> privateUrls() =>
-      _firebaseFirestore.collection(Paths.private).snapshots().map((snapshot) =>
-          snapshot.docs.map((doc) => Url.fromSnapshot(doc)).toList()
-            ..sort((a, b) => b.timestamp.compareTo(a.timestamp)));
-
-  @override
-  Stream<List<Url>> favoriteUrls() => _firebaseFirestore
-      .collection(Paths.favorites)
+  Stream<List<Url>> privateUrls(String userId) => _firebaseFirestore
+      .collection(Paths.private)
+      .where('userId', isEqualTo: userId)
       .snapshots()
       .map((snapshot) =>
           snapshot.docs.map((doc) => Url.fromSnapshot(doc)).toList()
             ..sort((a, b) => b.timestamp.compareTo(a.timestamp)));
+
+  @override
+  Stream<List<Url>> favoriteUrls(String userId) => _firebaseFirestore
+      .collection(Paths.favorites)
+      .where('userId', isEqualTo: userId)
+      .snapshots()
+      .map((snapshot) =>
+          snapshot.docs.map((doc) => Url.fromSnapshot(doc)).toList()
+            ..sort((a, b) => b.timestamp.compareTo(a.timestamp)));
+
+  Future<void> addToPublic(Url url) async {
+    await add('public', url);
+    await delete('private', url);
+  }
 }

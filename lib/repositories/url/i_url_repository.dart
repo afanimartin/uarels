@@ -9,7 +9,7 @@ abstract class IUrlRepository {
 
   Stream<List<Url>> publicUrls();
 
-  Stream<List<Url>> privateUrls();
+  Stream<List<Url>> privateUrls(String userId);
 
-  Stream<List<Url>> favoriteUrls();
+  Stream<List<Url>> favoriteUrls(String userId);
 }

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:Uarels/utils/paths.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,6 +10,7 @@ import '../../helpers/bloc/current_user_id.dart';
 import '../../models/url/url.dart';
 import '../../repositories/repositories.dart';
 import '../../repositories/url/url_repository.dart';
+import '../../utils/paths.dart';
 import '../blocs.dart';
 import 'public_url_event.dart';
 import 'public_url_state.dart';

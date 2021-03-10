@@ -1,16 +1,16 @@
-import 'package:Uarels/blocs/blocs.dart';
-import 'package:Uarels/blocs/favorite_url/favorite_url_event.dart';
-import 'package:Uarels/models/models.dart';
-import 'package:Uarels/models/url/url.dart';
-import 'package:Uarels/screens/article_details.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 import '../blocs/authentication/authentication_bloc.dart';
+import '../blocs/blocs.dart';
+import '../blocs/favorite_url/favorite_url_event.dart';
 import '../blocs/public_url/public_url_bloc.dart';
 import '../blocs/public_url/public_url_state.dart';
+import '../models/models.dart';
+import '../models/url/url.dart';
+import '../screens/article_details.dart';
 import 'progress_loader.dart';
 
 class PublicUrls extends StatelessWidget {
@@ -30,12 +30,12 @@ class PublicUrls extends StatelessWidget {
       }
 
       if (state is PublicUrlsUpdated) {
-        return state.publicUrls.isEmpty
+        return state.urls.isEmpty
             ? const Center(child: Text('No Urls to load'))
             : ListView.builder(
-                itemCount: state?.publicUrls?.length,
+                itemCount: state?.urls?.length,
                 itemBuilder: (context, index) {
-                  final url = state.publicUrls[index];
+                  final url = state.urls[index];
 
                   return _RenderPublicUrl(
                     url: url,

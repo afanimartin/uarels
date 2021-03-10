@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:Uarels/utils/paths.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,6 +8,7 @@ import '../../helpers/bloc/current_user_id.dart';
 import '../../models/models.dart';
 import '../../repositories/repositories.dart';
 import '../../repositories/url/url_repository.dart';
+import '../../utils/paths.dart';
 import '../blocs.dart';
 import 'favorite_url_event.dart';
 import 'favorite_url_state.dart';
@@ -46,8 +46,10 @@ class FavoriteUrlBloc extends Bloc<FavoriteUrlEvent, FavoriteUrlState> {
     try {
       await _favoriteUrlStreamSubscription?.cancel();
 
+      final currentUserId = _currentUserId.getCurrentUserId();
+
       _favoriteUrlStreamSubscription = _urlRepository
-          .favoriteUrls()
+          .favoriteUrls(currentUserId)
           .listen((urls) => add(UpdateUrls(urls: urls)));
     } on Exception catch (_) {
       yield UrlsLoadingFailed();
