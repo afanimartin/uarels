@@ -1,5 +1,5 @@
 class Paths {
-  static const urls = 'urls';
+  static const public = 'public';
   static const favorites = 'favorites';
   static const private = 'private';
 }

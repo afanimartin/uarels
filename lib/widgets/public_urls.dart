@@ -25,12 +25,12 @@ class PublicUrls extends StatelessWidget {
       }
 
       if (state is PublicUrlsUpdated) {
-        return state.publicUrls.isEmpty
+        return state.urls.isEmpty
             ? const Center(child: Text('No Urls to load'))
             : ListView.builder(
-                itemCount: state?.publicUrls?.length,
+                itemCount: state?.urls?.length,
                 itemBuilder: (context, index) {
-                  final url = state.publicUrls[index];
+                  final url = state.urls[index];
 
                   return RenderUrl(
                     url: url,

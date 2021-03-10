@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
-import '../blocs/authentication/authentication_bloc.dart';
 import '../blocs/blocs.dart';
 import '../blocs/private_url/private_url_event.dart';
 import '../blocs/private_url/private_url_state.dart';
@@ -12,46 +11,44 @@ import '../models/url/url.dart';
 import '../screens/article_details.dart';
 import 'progress_loader.dart';
 
-class PrivateUrls extends StatelessWidget {
+class PrivateUrls extends StatefulWidget {
   const PrivateUrls({Key key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final user = context.select((AuthenticationBloc bloc) => bloc.state.user);
+  _PrivateUrlsState createState() => _PrivateUrlsState();
+}
 
-    return BlocBuilder<PrivateUrlBloc, PrivateUrlState>(
-        builder: (context, state) {
-      if (state is PrivateUrlsLoading || state is AddingUrlToPublic) {
-        return const ProgressLoader();
-      }
+class _PrivateUrlsState extends State<PrivateUrls> {
+  @override
+  Widget build(BuildContext context) =>
+      BlocBuilder<PrivateUrlBloc, PrivateUrlState>(builder: (context, state) {
+        if (state is PrivateUrlsLoading || state is AddingUrlToPublic) {
+          return const ProgressLoader();
+        }
 
-      if (state is PrivateUrlsUpdated) {
-        return state.privateUrls.isEmpty
-            ? const Center(child: Text('No private urls to load'))
-            : ListView.builder(
-                itemCount: state?.privateUrls?.length,
-                itemBuilder: (context, index) {
-                  final url = state.privateUrls[index];
+        if (state is PrivateUrlsUpdated) {
+          return state.urls.isEmpty
+              ? const Center(child: Text('No private urls to load'))
+              : ListView.builder(
+                  itemCount: state?.urls?.length,
+                  itemBuilder: (context, index) {
+                    final url = state.urls[index];
 
-                  return _RenderPrivateUrl(
-                    url: url,
-                    user: user,
-                    key: const Key('private_urls'),
-                  );
-                });
-      }
+                    return _RenderPrivateUrl(
+                      url: url,
+                      key: const Key('private_urls'),
+                    );
+                  });
+        }
 
-      return const Text('');
-    });
-  }
+        return const Center(child: Text('Failed to connect to the server'));
+      });
 }
 
 class _RenderPrivateUrl extends StatelessWidget {
   final Url url;
-  final UserModel user;
 
-  _RenderPrivateUrl({@required this.url, @required this.user, Key key})
-      : super(key: key);
+  _RenderPrivateUrl({@required this.url, Key key}) : super(key: key);
 
   PrivateUrlBloc _privateBloc;
 

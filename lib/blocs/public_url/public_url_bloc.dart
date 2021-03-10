@@ -10,6 +10,7 @@ import '../../helpers/bloc/current_user_id.dart';
 import '../../models/url/url.dart';
 import '../../repositories/repositories.dart';
 import '../../repositories/url/url_repository.dart';
+import '../../utils/paths.dart';
 import '../blocs.dart';
 import 'public_url_event.dart';
 import 'public_url_state.dart';
@@ -49,10 +50,8 @@ class PublicUrlBloc extends Bloc<PublicUrlEvent, PublicUrlState> {
     try {
       await _urlStreamSubscription?.cancel();
 
-      final userId = _currentUserId.getCurrentUserId();
-
       _urlStreamSubscription = _urlRepository
-          .urls(userId)
+          .publicUrls()
           .listen((urls) => add(UpdateUrls(urls: urls)));
     } on Exception catch (_) {
       yield PublicUrlsLoadingFailed();
@@ -71,7 +70,7 @@ class PublicUrlBloc extends Bloc<PublicUrlEvent, PublicUrlState> {
           inputUrl: event.inputUrl,
           timestamp: Timestamp.now());
 
-      await _urlRepository.add(url);
+      await _urlRepository.add(Paths.public, url);
 
       yield UrlAdded();
     } on Exception catch (_) {
@@ -82,7 +81,7 @@ class PublicUrlBloc extends Bloc<PublicUrlEvent, PublicUrlState> {
   Stream<PublicUrlState> _mapAddUrlToPrivate(AddUrlToPrivate event) async* {
     yield AddingUrl();
     try {
-      await _urlRepository.addUrlToPrivate(event.url);
+      await _urlRepository.add(Paths.private, event.url);
 
       yield AddedUrl();
     } on Exception catch (_) {

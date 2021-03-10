@@ -43,7 +43,7 @@ class PrivateUrlBloc extends Bloc<PrivateUrlEvent, PrivateUrlState> {
       final currentUserId = _currentUserId.getCurrentUserId();
 
       _privateUrlsStreamSubscription = _urlRepository
-          .urls(currentUserId)
+          .privateUrls(currentUserId)
           .listen((urls) => add(UpdateUrls(urls: urls)));
     } on Exception catch (_) {
       yield PrivateUrlsUpdatingFailed();
@@ -51,9 +51,7 @@ class PrivateUrlBloc extends Bloc<PrivateUrlEvent, PrivateUrlState> {
   }
 
   Stream<PrivateUrlState> _mapUpdateUrlsToState(UpdateUrls event) async* {
-    final currentUserId = _currentUserId.getCurrentUserId();
-
-    yield PrivateUrlsUpdated(urls: event.urls, userId: currentUserId);
+    yield PrivateUrlsUpdated(urls: event.urls);
   }
 
   Stream<PrivateUrlState> _mapAddUrlToPublicState(AddUrlToPublic event) async* {
