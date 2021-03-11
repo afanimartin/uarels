@@ -22,6 +22,7 @@ class PublicUrls extends StatelessWidget {
         builder: (context, state) {
       if (state is PublicUrlsLoading ||
           state is UrlAdding ||
+          state is AddingUrl ||
           state is UrlDeleting ||
           state is SharingUrl) {
         return const ProgressLoader();
@@ -48,6 +49,4 @@ class PublicUrls extends StatelessWidget {
       );
     });
   }
-
-  
 }

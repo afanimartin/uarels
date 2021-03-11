@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:share/share.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../helpers/bloc/current_user_id.dart';
@@ -33,14 +32,10 @@ class PublicUrlBloc extends Bloc<PublicUrlEvent, PublicUrlState> {
   Stream<PublicUrlState> mapEventToState(PublicUrlEvent event) async* {
     if (event is LoadPublicUrls) {
       yield* _mapLoadPublicUrlsToState();
-    } else if (event is UpdateUrls) {
+    } else if (event is UpdatePublicUrls) {
       yield* _mapUrlsUpdatedToState(event);
     } else if (event is AddUrl) {
       yield* _mapAddUrlToState(event);
-    } else if (event is AddUrlToPrivate) {
-      yield* _mapAddUrlToPrivate(event);
-    } else if (event is ShareUrl) {
-      yield* _mapShareUrlToState(event);
     }
   }
 
@@ -52,7 +47,7 @@ class PublicUrlBloc extends Bloc<PublicUrlEvent, PublicUrlState> {
 
       _urlStreamSubscription = _urlRepository
           .publicUrls()
-          .listen((urls) => add(UpdateUrls(urls: urls)));
+          .listen((urls) => add(UpdatePublicUrls(urls: urls)));
     } on Exception catch (_) {
       yield PublicUrlsLoadingFailed();
     }
@@ -78,26 +73,16 @@ class PublicUrlBloc extends Bloc<PublicUrlEvent, PublicUrlState> {
     }
   }
 
-  Stream<PublicUrlState> _mapAddUrlToPrivate(AddUrlToPrivate event) async* {
-    yield AddingUrl();
-    try {
-      await _urlRepository.add(Paths.private, event.url);
 
-      yield AddedUrl();
-    } on Exception catch (_) {
-      yield AddingUrlFailed();
-    }
-  }
+  // Stream<PublicUrlState> _mapShareUrlToState(ShareUrl event) async* {
+  //   try {
+  //     await Share.share(event.inputUrl, subject: event.subject);
+  //   } on Exception catch (_) {
+  //     yield UrlSharingFailed();
+  //   }
+  // }
 
-  Stream<PublicUrlState> _mapShareUrlToState(ShareUrl event) async* {
-    try {
-      await Share.share(event.inputUrl, subject: event.subject);
-    } on Exception catch (_) {
-      yield UrlSharingFailed();
-    }
-  }
-
-  Stream<PublicUrlState> _mapUrlsUpdatedToState(UpdateUrls event) async* {
+  Stream<PublicUrlState> _mapUrlsUpdatedToState(UpdatePublicUrls event) async* {
     final currentUserId = _currentUserId.getCurrentUserId();
 
     yield PublicUrlsUpdated(urls: event.urls, userId: currentUserId);

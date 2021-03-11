@@ -57,15 +57,19 @@ class _HomeScreenState extends State<HomeScreen> {
             body: _renderUrls(state),
             floatingActionButton:
                 BlocBuilder<FavoriteUrlBloc, FavoriteUrlState>(
-              builder: (context, state) => FloatingActionButton(
-                onPressed: () => _buildUrlForm(context),
-                backgroundColor: Theme.of(context).primaryColor,
-                child: state is AddingToFavorites
-                    ? const ProgressLoader()
-                    : const Icon(
-                        Icons.add,
-                        color: Colors.white,
-                      ),
+              builder: (context, favoriteState) => Visibility(
+                // ignore: avoid_bool_literals_in_conditional_expressions
+                visible: state == AppTab.public ? true : false,
+                child: FloatingActionButton(
+                  onPressed: () => _buildUrlForm(context),
+                  backgroundColor: Theme.of(context).primaryColor,
+                  child: favoriteState is AddingToFavorites
+                      ? const ProgressLoader()
+                      : const Icon(
+                          Icons.add,
+                          color: Colors.white,
+                        ),
+                ),
               ),
             ),
             bottomNavigationBar: TabSelector(

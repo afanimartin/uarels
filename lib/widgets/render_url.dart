@@ -2,9 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:uarels/blocs/blocs.dart';
-import '../blocs/favorite_url/favorite_url_event.dart';
 
+import '../blocs/blocs.dart';
+import '../blocs/favorite_url/favorite_url_event.dart';
 import '../models/models.dart';
 import '../screens/article_details.dart';
 
@@ -69,6 +69,7 @@ class RenderUrl extends StatelessWidget {
                       onSelected: handleClick,
                       itemBuilder: (context) => {
                             if (!url.isPrivate) 'Add to favorites',
+
                             if (url.userId == user.userId && !url.isPrivate)
                               'Add to private',
                             if (url.userId == user.userId) 'Delete'
@@ -89,6 +90,9 @@ class RenderUrl extends StatelessWidget {
     switch (value) {
       case 'Add to favorites':
         _favoriteUrlBloc.add(AddUrlToFavorites(url: url));
+        break;
+      case 'Add to private':
+        _favoriteUrlBloc.add(AddUrlToPrivate(url: url));
         break;
 
       default:

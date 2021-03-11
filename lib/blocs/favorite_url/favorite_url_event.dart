@@ -32,6 +32,15 @@ class AddUrlToFavorites extends FavoriteUrlEvent {
   List<Object> get props => [url];
 }
 
+class AddUrlToPrivate extends FavoriteUrlEvent {
+  final Url url;
+
+  const AddUrlToPrivate({@required this.url});
+
+  @override
+  List<Object> get props => [url];
+}
+
 class RemoveFromFavorites extends FavoriteUrlEvent {
   final Url url;
 

@@ -37,6 +37,8 @@ class FavoriteUrlBloc extends Bloc<FavoriteUrlEvent, FavoriteUrlState> {
       yield* _mapRemoveFromFavoritesToState(event);
     } else if (event is AddUrlToFavorites) {
       yield* _mapAddUrlToFavorites(event);
+    } else if (event is AddToPrivate) {
+      yield* _mapAddUrlToPrivate(event);
     }
   }
 
@@ -75,6 +77,27 @@ class FavoriteUrlBloc extends Bloc<FavoriteUrlEvent, FavoriteUrlState> {
           timestamp: Timestamp.now());
 
       await _urlRepository.add(Paths.favorites, updatedUrl);
+
+      yield AddedToFavorites();
+    } on Exception catch (_) {
+      yield AddingToFavoritesFailed();
+    }
+  }
+
+  Stream<FavoriteUrlState> _mapAddUrlToPrivate(AddToPrivate event) async* {
+    yield AddingToFavorites();
+
+    try {
+      final currentUserId = _currentUserId.getCurrentUserId();
+
+      final updatedUrl = Url(
+          userId: currentUserId,
+          id: event.url.id,
+          isPrivate: !event.url.isPrivate,
+          inputUrl: event.url.inputUrl,
+          timestamp: Timestamp.now());
+
+      await _urlRepository.addToPrivate(updatedUrl);
 
       yield AddedToFavorites();
     } on Exception catch (_) {
