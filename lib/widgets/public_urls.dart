@@ -11,9 +11,12 @@ import 'widgets.dart';
 class PublicUrls extends StatelessWidget {
   const PublicUrls({Key key}) : super(key: key);
 
+  // FavoriteUrlBloc _favoriteUrlBloc;
+
   @override
   Widget build(BuildContext context) {
     final user = context.select((AuthenticationBloc bloc) => bloc.state.user);
+    // _favoriteUrlBloc = BlocProvider.of<FavoriteUrlBloc>(context);
 
     return BlocBuilder<PublicUrlBloc, PublicUrlState>(
         builder: (context, state) {
@@ -35,24 +38,16 @@ class PublicUrls extends StatelessWidget {
                   return RenderUrl(
                     url: url,
                     user: user,
-                    handleClick: handleClick,
                     key: const Key('public_urls'),
                   );
                 });
       }
 
-      return const Text('');
+      return const Center(
+        child: Text(''),
+      );
     });
   }
 
-  void handleClick(String value) {
-    switch (value) {
-      case 'Add to favorites':
-        // _favoriteUrlBloc.add(AddUrlToFavorites(url: url));
-        break;
-
-      default:
-        break;
-    }
-  }
+  
 }

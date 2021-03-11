@@ -56,4 +56,8 @@ class UrlRepository extends IUrlRepository {
     await add('public', url);
     await delete('private', url);
   }
+
+  Future<void> addToFavorites(Url url) async {
+    await add('favorites', url);
+  }
 }

@@ -70,6 +70,7 @@ class FavoriteUrlBloc extends Bloc<FavoriteUrlEvent, FavoriteUrlState> {
       final updatedUrl = Url(
           userId: currentUserId,
           id: event.url.id,
+          isFavorite: !event.url.isFavorite,
           inputUrl: event.url.inputUrl,
           timestamp: Timestamp.now());
 
