@@ -68,11 +68,14 @@ class RenderUrl extends StatelessWidget {
                   PopupMenuButton<String>(
                       onSelected: handleClick,
                       itemBuilder: (context) => {
-                            if (!url.isPrivate) 'Add to favorites',
-
+                            if (!url.isPrivate && !url.isFavorite)
+                              'Add to favorites',
                             if (url.userId == user.userId && !url.isPrivate)
                               'Add to private',
-                            if (url.userId == user.userId) 'Delete'
+                            if (url.isPrivate) 'Remove from private',
+                            if (url.isFavorite) 'Remove from favorites',
+                            if (url.isPrivate) 'Delete',
+                            if (!url.isFavorite && !url.isPrivate) 'Share'
                           }
                               .map((choice) => PopupMenuItem<String>(
                                   value: choice, child: Text(choice)))
