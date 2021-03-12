@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uarels/blocs/public_url/public_url_event.dart';
 
 import '../blocs/authentication/authentication_event.dart';
 import '../blocs/blocs.dart';
@@ -81,6 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<Widget> _buildUrlForm(BuildContext context) => showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      enableDrag: true,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (context) => Padding(
@@ -88,19 +90,38 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom),
-                  child: TextField(
-                    controller: _urlTextEditingController,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Theme.of(context).accentColor),
-                            borderRadius: BorderRadius.circular(5)),
-                        hintText: 'Paste url link'),
-                  ),
+                TextField(
+                  controller: _urlTextEditingController,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Theme.of(context).accentColor),
+                          borderRadius: BorderRadius.circular(5)),
+                      hintText: 'Paste url link'),
                 ),
+                const SizedBox(height: 6),
+                ElevatedButton(
+                    onPressed: () {
+                      if (_urlTextEditingController.text.isNotEmpty) {
+                        context.read<PublicUrlBloc>().add(
+                            AddUrl(inputUrl: _urlTextEditingController.text));
+
+                        _urlTextEditingController.clear();
+
+                        Navigator.pop(context);
+                      }
+                    },
+                    style: ButtonStyle(
+                        minimumSize:
+                            MaterialStateProperty.all(const Size(400, 50)),
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Theme.of(context).primaryColor),
+                        padding: MaterialStateProperty.all(
+                            const EdgeInsets.all(16))),
+                    child: const Text(
+                      'Save url',
+                      style: TextStyle(fontSize: 20),
+                    ))
               ],
             ),
           ));
