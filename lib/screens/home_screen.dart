@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uarels/blocs/log_in/log_in_bloc.dart';
 import 'package:uarels/blocs/public_url/public_url_event.dart';
+import 'package:uarels/repositories/authentication/authentication_repository.dart';
+import 'package:uarels/screens/screens.dart';
 
 import '../blocs/authentication/authentication_event.dart';
 import '../blocs/blocs.dart';
@@ -13,18 +16,13 @@ import '../widgets/private_urls.dart';
 import '../widgets/public_urls.dart';
 import '../widgets/widgets.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key key}) : super(key: key);
+class HomeScreen extends StatelessWidget {
+  final _urlTextEditingController = TextEditingController();
+
+  HomeScreen({Key key}) : super(key: key);
 
   static Route<void> route() =>
-      MaterialPageRoute<void>(builder: (_) => const HomeScreen());
-
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  final _urlTextEditingController = TextEditingController();
+      MaterialPageRoute<void>(builder: (_) => HomeScreen());
 
   @override
   Widget build(BuildContext context) => BlocBuilder<TabBloc, AppTab>(
@@ -51,8 +49,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       Icons.exit_to_app,
                       size: 30,
                     ),
-                    onPressed: () =>
-                        context.read<AuthenticationBloc>().add(LogUserOut()))
+                    onPressed: () {
+                      context.read<LogInCubit>().logOut();
+
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (_) => BlocProvider<LogInCubit>(
+                                create: (_) => LogInCubit(
+                                    authenticationRepository:
+                                        AuthenticationRepository()),
+                                child: LogInScreen(),
+                              )));
+                    })
               ],
             ),
             body: _renderUrls(state),

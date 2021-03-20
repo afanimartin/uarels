@@ -18,8 +18,6 @@ class AuthenticationBloc
       {@required AuthenticationRepository authenticationRepository})
       : _authenticationRepository = authenticationRepository,
         super(const AuthenticationState()) {
-    _userStreamSubscription?.cancel();
-
     _userStreamSubscription = _authenticationRepository.user
         .listen((user) => add(AuthenticationUserChanged(user: user)));
   }
@@ -39,4 +37,11 @@ class AuthenticationBloc
       event.user == UserModel.empty
           ? AuthenticationState.unauthenticated()
           : AuthenticationState.authenticated(event.user);
+
+  @override
+  Future<void> close() {
+    _userStreamSubscription?.cancel();
+
+    return super.close();
+  }
 }

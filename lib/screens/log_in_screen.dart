@@ -9,9 +9,5 @@ class LogInScreen extends StatelessWidget {
       MaterialPageRoute<void>(builder: (_) => const LogInScreen());
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: const LogInForm(),
-        ),
-      );
+  Widget build(BuildContext context) => Scaffold(body: const LogInForm());
 }

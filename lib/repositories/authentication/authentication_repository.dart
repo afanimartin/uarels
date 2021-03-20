@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:uarels/exceptions/authentication/authentication_exceptions.dart';
 
 import '../../models/models.dart';
 import 'i_authentication_repository.dart';
@@ -20,17 +21,19 @@ class AuthenticationRepository implements IAuthenticationRepository {
           firebaseUser == null ? UserModel.empty : toUser(firebaseUser));
 
   @override
-  Future<UserModel> logInWithGoogleAccount() async {
-    final googleUser = await _googleSignIn.signIn();
-    final googleAuthentication = await googleUser.authentication;
+  Future<void> logInWithGoogleAccount() async {
+    try {
+      final googleUser = await _googleSignIn.signIn();
+      final googleAuthentication = await googleUser.authentication;
 
-    final googleCredential = GoogleAuthProvider.credential(
-        accessToken: googleAuthentication.accessToken,
-        idToken: googleAuthentication.idToken);
+      final googleCredential = GoogleAuthProvider.credential(
+          accessToken: googleAuthentication.accessToken,
+          idToken: googleAuthentication.idToken);
 
-    final user = await _firebaseAuth.signInWithCredential(googleCredential);
-
-    return toUser(user.user);
+      await _firebaseAuth.signInWithCredential(googleCredential);
+    } on Exception catch (_) {
+      throw LogInWithGoogleFailure;
+    }
   }
 
   @override
@@ -47,7 +50,11 @@ class AuthenticationRepository implements IAuthenticationRepository {
 
   @override
   Future<void> logOut() async {
-    await _googleSignIn.signOut();
+    try {
+      await Future.wait([_googleSignIn.signOut()]);
+    } on Exception {
+      throw LogOutFailure;
+    }
   }
 
   UserModel toUser(User firebaseUser) => UserModel(
