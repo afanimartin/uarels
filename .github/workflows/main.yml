@@ -41,7 +41,6 @@ jobs:
         echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/key.properties
     - name: Build Android App Bundle
       run: flutter build appbundle  
-
         
     - name: Setup Ruby
       uses: actions/setup-ruby@v1
